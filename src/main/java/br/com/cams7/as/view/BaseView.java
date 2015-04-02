@@ -32,7 +32,7 @@ import br.com.cams7.util.AppUtil;
  * @author cesar
  *
  */
-public abstract class BaseView</*S extends BaseService<E, ?>,*/ E extends BaseEntity<?>>
+public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity<?>>
 		extends AbstractBase<E> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -123,20 +123,20 @@ public abstract class BaseView</*S extends BaseService<E, ?>,*/ E extends BaseEn
 
 				lastPageFirst = (short) first;
 
-//				entities = getService().search(lastPageFirst, lastPageSize,
-//						lastSortField,
-//						SortOrderField.valueOf(lastSortOrder.name()),
-//						lastFilters, joins);
-//
-//				// rowCount
-//				if (rowCountChanged)
-//					setRowCount((int) getService().count(lastFilters, joins));
+				entities = getService().search(lastPageFirst, lastPageSize,
+						lastSortField,
+						SortOrderField.valueOf(lastSortOrder.name()),
+						lastFilters, joins);
+
+				// rowCount
+				if (rowCountChanged)
+					setRowCount((int) getService().count(lastFilters, joins));
 
 				return entities;
 			}
 		};
 
-//		totalRows = (int) getService().count(joins);
+		totalRows = (int) getService().count(joins);
 		lazyModel.setRowCount(totalRows);
 
 		init();
@@ -217,7 +217,7 @@ public abstract class BaseView</*S extends BaseService<E, ?>,*/ E extends BaseEn
 		return ENTITY_ARGUMENT_NUMBER;
 	}
 
-//	protected abstract S getService();
+	protected abstract S getService();
 
 	public LazyDataModel<E> getLazyModel() {
 		return lazyModel;

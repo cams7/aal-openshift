@@ -3,7 +3,6 @@
  */
 package br.com.cams7.sisbarc.aal.view;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -19,15 +18,14 @@ import br.com.cams7.jpa.domain.BaseEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
-//import br.com.cams7.sisbarc.aal.service.ejb.AALService;
-//import br.com.cams7.sisbarc.aal.service.ejb.MonitorException;
+import br.com.cams7.sisbarc.aal.service.ejb.AALService;
 
 /**
  * @author cams7
  *
  */
-public abstract class AALView</*S extends BaseService<E, ?>,*/ E extends BaseEntity<?>>
-		extends BaseView</*S,*/ E> {
+public abstract class AALView<S extends BaseService<E, ?>, E extends BaseEntity<?>>
+		extends BaseView<S, E> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,83 +47,83 @@ public abstract class AALView</*S extends BaseService<E, ?>,*/ E extends BaseEnt
 		RequestContext context = RequestContext.getCurrentInstance();
 		final String CALLBACK_PARAM = "arduinoAtualizado";
 
-//		try {
-//
-//			Future<Boolean> call = ((AALService<E, ?>) getService())
-//					.atualizaPino(entidade);
-//
-//			boolean arduinoRun = call.get();
-//
-//			if (arduinoRun) {
-//				String summary = getMessageFromI18N("info.msg.pin.update.ok");// Resumo
-//				String detail = getMessageFromI18N("info.msg.pin.update", pino
-//						.getId().getPinType().name(), pino.getId().getPin());// Detalhes
-//
-//				addINFOMessage(summary, detail);
-//				context.addCallbackParam(CALLBACK_PARAM, true);
-//			} else {
-//				addMessageArduinoNotRun(MSG_ERROR_UPDATE);
-//				context.addCallbackParam(CALLBACK_PARAM, false);
-//			}
-//		} catch (InterruptedException | ExecutionException e) {
-//			addERRORMessage(MSG_ERROR_UPDATE, e.getMessage());
-//			context.addCallbackParam(CALLBACK_PARAM, false);
-//		} catch (NullPointerException | MonitorException e) {
-//			addMessageMonitorNotRun(MSG_ERROR_UPDATE);
-//			context.addCallbackParam(CALLBACK_PARAM, false);
-//		}
+		try {
+
+			Future<Boolean> call = ((AALService<E, ?>) getService())
+					.atualizaPino(entidade);
+
+			boolean arduinoRun = call.get();
+
+			if (arduinoRun) {
+				String summary = getMessageFromI18N("info.msg.pin.update.ok");// Resumo
+				String detail = getMessageFromI18N("info.msg.pin.update", pino
+						.getId().getPinType().name(), pino.getId().getPin());// Detalhes
+
+				addINFOMessage(summary, detail);
+				context.addCallbackParam(CALLBACK_PARAM, true);
+			} else {
+				addMessageArduinoNotRun(MSG_ERROR_UPDATE);
+				context.addCallbackParam(CALLBACK_PARAM, false);
+			}
+		} catch (InterruptedException | ExecutionException e) {
+			addERRORMessage(MSG_ERROR_UPDATE, e.getMessage());
+			context.addCallbackParam(CALLBACK_PARAM, false);
+		} catch (NullPointerException e) {
+			addMessageMonitorNotRun(MSG_ERROR_UPDATE);
+			context.addCallbackParam(CALLBACK_PARAM, false);
+		}
 
 	}
 
 	public void atualizaPinos(ActionEvent event) {
 		final String MSG_ERROR_UPDATE = getMessageFromI18N("error.msg.pins.update");
 
-//		List<E> pinos = getService().findAll();
-//		try {
-//			Future<Boolean> call = ((AALService<E, ?>) getService())
-//					.alteraEventos(pinos);
-//
-//			boolean arduinoRun = call.get();
-//
-//			if (arduinoRun) {
-//				String summary = getMessageFromI18N("info.msg.pins.update.ok");// Resumo
-//				String detail = getMessageFromI18N("info.msg.pins.update");// Detalhes
-//
-//				addINFOMessage(summary, detail);
-//			} else
-//				addMessageArduinoNotRun(MSG_ERROR_UPDATE);
-//
-//		} catch (InterruptedException | ExecutionException e) {
-//			addERRORMessage(MSG_ERROR_UPDATE, e.getMessage());
-//		} catch (NullPointerException | MonitorException e) {
-//			addMessageMonitorNotRun(MSG_ERROR_UPDATE);
-//		}
+		List<E> pinos = getService().findAll();
+		try {
+			Future<Boolean> call = ((AALService<E, ?>) getService())
+					.alteraEventos(pinos);
+
+			boolean arduinoRun = call.get();
+
+			if (arduinoRun) {
+				String summary = getMessageFromI18N("info.msg.pins.update.ok");// Resumo
+				String detail = getMessageFromI18N("info.msg.pins.update");// Detalhes
+
+				addINFOMessage(summary, detail);
+			} else
+				addMessageArduinoNotRun(MSG_ERROR_UPDATE);
+
+		} catch (InterruptedException | ExecutionException e) {
+			addERRORMessage(MSG_ERROR_UPDATE, e.getMessage());
+		} catch (NullPointerException e) {
+			addMessageMonitorNotRun(MSG_ERROR_UPDATE);
+		}
 
 	}
 
 	public void sincronizaPinos(ActionEvent event) {
 		final String MSG_ERROR_SYNCHRONIZE = getMessageFromI18N("error.msg.pins.synchronize");
 
-//		List<E> pinos = getService().findAll();
-//		try {
-//			Future<Boolean> call = ((AALService<E, ?>) getService())
-//					.sincronizaEventos(pinos);
-//
-//			boolean arduinoRun = call.get();
-//
-//			if (arduinoRun) {
-//				String summary = getMessageFromI18N("info.msg.pins.synchronize.ok");// Resumo
-//				String detail = getMessageFromI18N("info.msg.pins.synchronize");// Detalhes
-//
-//				addINFOMessage(summary, detail);
-//			} else
-//				addMessageArduinoNotRun(MSG_ERROR_SYNCHRONIZE);
-//
-//		} catch (InterruptedException | ExecutionException e) {
-//			addERRORMessage(MSG_ERROR_SYNCHRONIZE, e.getMessage());
-//		} catch (NullPointerException | MonitorException e) {
-//			addMessageMonitorNotRun(MSG_ERROR_SYNCHRONIZE);
-//		}
+		List<E> pinos = getService().findAll();
+		try {
+			Future<Boolean> call = ((AALService<E, ?>) getService())
+					.sincronizaEventos(pinos);
+
+			boolean arduinoRun = call.get();
+
+			if (arduinoRun) {
+				String summary = getMessageFromI18N("info.msg.pins.synchronize.ok");// Resumo
+				String detail = getMessageFromI18N("info.msg.pins.synchronize");// Detalhes
+
+				addINFOMessage(summary, detail);
+			} else
+				addMessageArduinoNotRun(MSG_ERROR_SYNCHRONIZE);
+
+		} catch (InterruptedException | ExecutionException e) {
+			addERRORMessage(MSG_ERROR_SYNCHRONIZE, e.getMessage());
+		} catch (NullPointerException e) {
+			addMessageMonitorNotRun(MSG_ERROR_SYNCHRONIZE);
+		}
 
 	}
 

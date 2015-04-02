@@ -22,8 +22,7 @@ import br.com.cams7.arduino.ArduinoPinType;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
-//import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
-//import br.com.cams7.sisbarc.aal.service.ejb.MonitorException;
+import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
 
 /**
  * @author cams7
@@ -33,11 +32,11 @@ import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
 @RequestScoped
 public class ArduinoResourceRESTService {
 
-//	@Inject
-//	private Logger log;
+	@Inject
+	private Logger log;
 
-//	@EJB
-//	private LEDService service;
+	@EJB
+	private LEDService service;
 
 	// LED Amarela - arduino/led?tipo_pino=DIGITAL&pino=11&estado=ON
 	// LED Verde - arduino/led?tipo_pino=DIGITAL&pino=10&estado=OFF
@@ -53,17 +52,17 @@ public class ArduinoResourceRESTService {
 		ArduinoPinType tipoPino = ArduinoPinType.valueOf(stringTipoPino);
 		Short pino = Short.valueOf(stringPino);
 
-//		LEDEntity led = service.findOne(new PinPK(tipoPino, pino));
-//		led.setEstado(EstadoLED.valueOf(stringEstado));
-//
-//		try {
-//			Future<LEDEntity> call = service.alteraLEDEstado(led);
-//			return call.get();
-//		} catch (InterruptedException | ExecutionException e) {
-//			log.log(Level.SEVERE, e.getMessage());
-//		} catch (NullPointerException | MonitorException e) {
-//			log.log(Level.WARNING, e.getMessage());
-//		}
+		LEDEntity led = service.findOne(new PinPK(tipoPino, pino));
+		led.setEstado(EstadoLED.valueOf(stringEstado));
+
+		try {
+			Future<LEDEntity> call = service.alteraLEDEstado(led);
+			return call.get();
+		} catch (InterruptedException | ExecutionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
+			log.log(Level.WARNING, e.getMessage());
+		}
 
 		return null;
 	}
@@ -72,14 +71,14 @@ public class ArduinoResourceRESTService {
 	@Path("/leds")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<LEDEntity> getLEDs() {
-//		try {
-//			Future<List<LEDEntity>> call = service.getLEDsAtivadoPorBotao();
-//			return call.get();
-//		} catch (InterruptedException | ExecutionException e) {
-//			log.log(Level.SEVERE, e.getMessage());
-//		} catch (NullPointerException | MonitorException e) {
-//			log.log(Level.WARNING, e.getMessage());
-//		}
+		try {
+			Future<List<LEDEntity>> call = service.getLEDsAtivadoPorBotao();
+			return call.get();
+		} catch (InterruptedException | ExecutionException e) {
+			log.log(Level.SEVERE, e.getMessage());
+		} catch (NullPointerException e) {
+			log.log(Level.WARNING, e.getMessage());
+		}
 
 		return null;
 	}

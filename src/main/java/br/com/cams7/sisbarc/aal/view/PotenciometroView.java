@@ -10,7 +10,7 @@ import javax.faces.bean.ViewScoped;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.PotenciometroEntity;
-//import br.com.cams7.sisbarc.aal.service.ejb.PotenciometroService;
+import br.com.cams7.sisbarc.aal.service.ejb.PotenciometroService;
 
 /**
  * @author cams7
@@ -19,12 +19,12 @@ import br.com.cams7.sisbarc.aal.jpa.domain.entity.PotenciometroEntity;
 @ManagedBean(name = "potenciometroView")
 @ViewScoped
 public class PotenciometroView extends
-		AALView</*PotenciometroService,*/ PotenciometroEntity> {
+		AALView<PotenciometroService, PotenciometroEntity> {
 
 	private static final long serialVersionUID = 1L;
 
-//	@EJB
-//	private PotenciometroService service;
+	@EJB
+	private PotenciometroService service;
 
 	@SuppressWarnings("unchecked")
 	public PotenciometroView() {
@@ -55,9 +55,9 @@ public class PotenciometroView extends
 		return intervalos;
 	}
 
-//	@Override
-//	protected PotenciometroService getService() {
-//		return service;
-//	}
+	@Override
+	protected PotenciometroService getService() {
+		return service;
+	}
 
 }

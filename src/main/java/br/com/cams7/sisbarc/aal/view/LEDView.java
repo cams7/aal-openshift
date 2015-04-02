@@ -7,7 +7,7 @@ import javax.faces.bean.ViewScoped;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.CorLED;
-//import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
+import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
 
 /**
  * Componente responsável por integrar o front-end (páginas JSF) c/ camada de
@@ -31,15 +31,15 @@ import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.CorLED;
  */
 @ManagedBean(name = "ledView")
 @ViewScoped
-public class LEDView extends AALView</*LEDService,*/ LEDEntity> {
+public class LEDView extends AALView<LEDService, LEDEntity> {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Container injeta a referencia p/ o ejb MercadoriaService
 	 */
-//	@EJB
-//	private LEDService service;
+	@EJB
+	private LEDService service;
 
 	@SuppressWarnings("unchecked")
 	public LEDView() {
@@ -51,10 +51,10 @@ public class LEDView extends AALView</*LEDService,*/ LEDEntity> {
 		getLog().info("Init View");
 	}
 
-//	@Override
-//	protected LEDService getService() {
-//		return service;
-//	}
+	@Override
+	protected LEDService getService() {
+		return service;
+	}
 
 	public CorLED[] getCores() {
 		return CorLED.values();

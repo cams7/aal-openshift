@@ -14,14 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.kitchensink_ear.util;
+package br.com.cams7.sisbarc.aal.util;
 
-import javax.enterprise.context.RequestScoped;
+import java.util.logging.Logger;
+
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
- * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans
+ * This class uses CDI to alias Java EE resources, such as the persistence
+ * context, to CDI beans
  * 
  * <p>
  * Example injection on a managed bean field:
@@ -32,12 +36,16 @@ import javax.faces.context.FacesContext;
  * private EntityManager em;
  * </pre>
  */
-public class WebResources {
+public class Resources {
+	// use @SuppressWarnings to tell IDE to ignore warnings about field not
+	// being referenced directly
+	@Produces
+	@PersistenceContext
+	private EntityManager em;
 
-    @Produces
-    @RequestScoped
-    public FacesContext produceFacesContext() {
-        return FacesContext.getCurrentInstance();
-    }
-
+	@Produces
+	public Logger produceLog(InjectionPoint injectionPoint) {
+		return Logger.getLogger(injectionPoint.getMember().getDeclaringClass()
+				.getName());
+	}
 }
