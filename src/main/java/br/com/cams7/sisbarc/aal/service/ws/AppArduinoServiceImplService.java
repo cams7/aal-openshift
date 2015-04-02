@@ -18,7 +18,7 @@ import javax.xml.ws.WebServiceFeature;
 @WebServiceClient(name = AppArduinoServiceImplService.SEVICE_NAME + "Service", targetNamespace = AppArduinoService.SEVICE_NAMESPACE, wsdlLocation = AppArduinoServiceImplService.WSDL_LOCATION)
 public class AppArduinoServiceImplService extends Service {
 
-	public static final String WSDL_LOCATION = "http://localhost:8080/acende_apaga_leds/aal_monitor?wsdl";
+	public static final String WSDL_LOCATION = "http://200.141.84.2:8080/acende_apaga_leds/aal_monitor?wsdl";
 	public static final String SEVICE_NAME = AppArduinoService.SEVICE_NAME
 			+ "Impl";
 

@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "HelloServiceImplService", targetNamespace = "http://ws.teste.cams7.com.br/", wsdlLocation = "http://192.168.1.50:8080/acende_apaga_leds/sayhello?wsdl")
+@WebServiceClient(name = "HelloServiceImplService", targetNamespace = "http://ws.teste.cams7.com.br/", wsdlLocation = "http://200.141.84.2:8080/acende_apaga_leds/sayhello?wsdl")
 public class HelloServiceImplService
     extends Service
 {
@@ -30,7 +30,7 @@ public class HelloServiceImplService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://192.168.1.50:8080/acende_apaga_leds/sayhello?wsdl");
+            url = new URL("http://200.141.84.2:8080/acende_apaga_leds/sayhello?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
