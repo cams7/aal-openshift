@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
+	version="2.0">
+	<endpoint name="HelloServiceImpl" implementation="br.com.cams7.teste.ws.HelloServiceImpl"
+		url-pattern="/sayhello" />
+
+	<endpoint name="AppArduinoServiceImpl"
+		implementation="br.com.cams7.sisbarc.aal.ws.AppArduinoServiceImpl"
+		url-pattern="/aal_monitor" />
+</endpoints>

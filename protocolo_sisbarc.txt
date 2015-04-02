@@ -1,0 +1,24 @@
+Protocolo SISBARC 32 bits
+
+ARDUINO/OTHER_DEVICE | SEND/SEND_RESPONSE/RESPONSE/RESPONSE_RESPONSE | EXECUTE/MESSAGE | DIGITAL/ANALOG | PIN | PIN_VALUE
+0/1                  | 0/1/2/3                                       | 0/3             | 0              | 0-63| 0-255  
+0/1                  | 0/1/2/3                                       | 0/3             | 1              | 0-15| 0-1023
+
+ARDUINO/OTHER_DEVICE | SEND/SEND_RESPONSE/RESPONSE/RESPONSE_RESPONSE | WRITE/READ      | DIGITAL/ANALOG | PIN | THREAD_TIME | ACTION_EVENT
+0/1                  | 0/1/2/3                                       | 1/2             | 0              | 0-63| 0-7         | 0-31  
+0/1                  | 0/1/2/3                                       | 1/2             | 1              | 0-15| 0-7         | 0-127
+
+Procolo SISBARC 64 bits
+FROM/TO                                                 =  1 bit
+SEND/SEND_RESPONSE/RESPONSE/RESPONSE_RESPONSE           =  2 bits
+EXECUTE/WRITE/READ/MESSAGE                              =  2 bits 
+DIGITAL/ANALOG                                          =  1 bit 
+(PIN + PIN_VALUE) ou (PIN + THREAD_TIME + ACTION_EVENT) = 14 bits "((6 + 8) ou (4 + 10)) ou ((6 + 3 + 5) ou (4 + 3 + 7))"
+CRC                                                     =  8 bits
+Bits de sequencia                                       =  8 bits
+Bits de IDs(Codigos dos arduinos 'slaves')              = 24 bits "(3 * 8)" '8 DEVICE_ID(s)'
+Bits restantes                                          =  4 bits  
+------------------------------------------------------------------------------------
+TOTAL                                                   = 64 bits (8 bytes)
+
+Valores para o calculo do algoritimo RSA: 1 + 2 + 2 + 1 + 14 + 4 + 8(CRC) = 32 bits
