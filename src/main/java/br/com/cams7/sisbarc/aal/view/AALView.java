@@ -11,14 +11,14 @@ import java.util.concurrent.Future;
 import javax.faces.event.ActionEvent;
 import javax.persistence.metamodel.SingularAttribute;
 
-//import org.primefaces.context.RequestContext;
+import org.primefaces.context.RequestContext;
 
 //import br.com.cams7.as.service.BaseService;
 //import br.com.cams7.as.view.BaseView;
-//import br.com.cams7.jpa.domain.BaseEntity;
-//import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
-//import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
-//import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
+import br.com.cams7.jpa.domain.BaseEntity;
+import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
+import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
+import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 //import br.com.cams7.sisbarc.aal.service.ejb.AALService;
 //import br.com.cams7.sisbarc.aal.service.ejb.MonitorException;
 
@@ -31,9 +31,9 @@ public abstract class AALView/*<S extends BaseService<E, ?>, E extends BaseEntit
 
 	private static final long serialVersionUID = 1L;
 
-	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public AALView(
-			/*SingularAttribute<? extends BaseEntity<?>, ? extends BaseEntity<?>>... joins*/) {
+			SingularAttribute<? extends BaseEntity<?>, ? extends BaseEntity<?>>... joins) {
 		//super(joins);
 	}
 
@@ -129,12 +129,12 @@ public abstract class AALView/*<S extends BaseService<E, ?>, E extends BaseEntit
 
 	}
 
-//	public Evento[] getEventos() {
-//		return Evento.values();
-//	}
-//
-//	public Intervalo[] getIntervalos() {
-//		return Intervalo.values();
-//	}
+	public Evento[] getEventos() {
+		return Evento.values();
+	}
+
+	public Intervalo[] getIntervalos() {
+		return Intervalo.values();
+	}
 
 }

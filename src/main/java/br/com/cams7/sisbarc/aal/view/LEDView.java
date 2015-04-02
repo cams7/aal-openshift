@@ -4,9 +4,9 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-//import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
-//import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
-//import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.CorLED;
+import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
+import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
+import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.CorLED;
 //import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
 
 /**
@@ -41,7 +41,7 @@ public class LEDView extends AALView/*<LEDService, LEDEntity>*/ {
 //	@EJB
 //	private LEDService service;
 
-//	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public LEDView() {
 		super();
 	}
@@ -56,18 +56,18 @@ public class LEDView extends AALView/*<LEDService, LEDEntity>*/ {
 //		return service;
 //	}
 
-//	public CorLED[] getCores() {
-//		return CorLED.values();
-//	}
+	public CorLED[] getCores() {
+		return CorLED.values();
+	}
 
-//	@Override
-//	public Evento[] getEventos() {
-//		Evento[] eventos = new Evento[3];
-//		eventos[0] = Evento.ACENDE_APAGA;
-//		eventos[1] = Evento.PISCA_PISCA;
-//		eventos[2] = Evento.FADE;
-//
-//		return eventos;
-//	}
+	@Override
+	public Evento[] getEventos() {
+		Evento[] eventos = new Evento[3];
+		eventos[0] = Evento.ACENDE_APAGA;
+		eventos[1] = Evento.PISCA_PISCA;
+		eventos[2] = Evento.FADE;
+
+		return eventos;
+	}
 
 }

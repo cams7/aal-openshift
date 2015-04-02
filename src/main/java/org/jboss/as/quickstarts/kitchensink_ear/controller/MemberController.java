@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-//import org.jboss.as.quickstarts.bean_validation.model.Member;
+import org.jboss.as.quickstarts.bean_validation.model.Member;
 //import org.jboss.as.quickstarts.kitchensink_ear.service.MemberRegistration;
 
 // The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
@@ -40,13 +40,13 @@ public class MemberController {
 //    @Inject
 //    private MemberRegistration memberRegistration;
 
-//    private Member newMember;
+    private Member newMember;
 
-//    @Produces
-//    @Named
-//    public Member getNewMember() {
-//        return newMember;
-//    }
+    @Produces
+    @Named
+    public Member getNewMember() {
+        return newMember;
+    }
 
     public void register() throws Exception {
 //        try {
@@ -63,7 +63,7 @@ public class MemberController {
 
     @PostConstruct
     public void initNewMember() {
-//        newMember = new Member();
+        newMember = new Member();
     }
 
     private String getRootErrorMessage(Exception e) {
