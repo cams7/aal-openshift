@@ -31,7 +31,7 @@ import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.CorLED;
  */
 @ManagedBean(name = "ledView")
 @ViewScoped
-public class LEDView extends AALView/*<LEDService, LEDEntity>*/ {
+public class LEDView extends AALView</*LEDService,*/ LEDEntity> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,10 +46,10 @@ public class LEDView extends AALView/*<LEDService, LEDEntity>*/ {
 		super();
 	}
 
-//	@Override
-//	protected void init() {
-//		getLog().info("Init View");
-//	}
+	@Override
+	protected void init() {
+		getLog().info("Init View");
+	}
 
 //	@Override
 //	protected LEDService getService() {

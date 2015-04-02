@@ -14,21 +14,21 @@ import org.primefaces.showcase.domain.CountryEntity;
 import org.primefaces.showcase.domain.StateEntity_;
 //import org.primefaces.showcase.service.CarService;
 
-//import br.com.cams7.as.view.BaseView;
+import br.com.cams7.as.view.BaseView;
 
 @ManagedBean(name = "dtLazyView")
 @ViewScoped
-public class LazyView /*extends BaseView<CarService, CarEntity>*/implements Serializable {
+public class LazyView extends BaseView</*CarService,*/ CarEntity>implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 //	@EJB
 //	private CarService service;
 
-//	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public LazyView() {
-//		super(CarEntity_.brand, CarBrandEntity_.city, CityEntity_.state,
-//				StateEntity_.country);
+		super(CarEntity_.brand, CarBrandEntity_.city, CityEntity_.state,
+				StateEntity_.country);
 	}
 
 //	@Override
@@ -36,10 +36,10 @@ public class LazyView /*extends BaseView<CarService, CarEntity>*/implements Seri
 //		return service;
 //	}
 
-//	@Override
-//	protected void init() {
-//		getLog().info("Init View");
-//	}
+	@Override
+	protected void init() {
+		getLog().info("Init View");
+	}
 
 	public CarEntity.Color[] getColors() {
 		return CarEntity.Color.values();

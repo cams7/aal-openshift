@@ -19,7 +19,7 @@ import br.com.cams7.sisbarc.aal.jpa.domain.entity.PotenciometroEntity;
 @ManagedBean(name = "potenciometroView")
 @ViewScoped
 public class PotenciometroView extends
-		AALView/*<PotenciometroService, PotenciometroEntity>*/ {
+		AALView</*PotenciometroService,*/ PotenciometroEntity> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,10 +31,10 @@ public class PotenciometroView extends
 		super();
 	}
 
-//	@Override
-//	protected void init() {
-//		getLog().info("Init View");
-//	}
+	@Override
+	protected void init() {
+		getLog().info("Init View");
+	}
 
 	@Override
 	public Evento[] getEventos() {

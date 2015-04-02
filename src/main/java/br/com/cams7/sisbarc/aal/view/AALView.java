@@ -13,8 +13,8 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import org.primefaces.context.RequestContext;
 
-//import br.com.cams7.as.service.BaseService;
-//import br.com.cams7.as.view.BaseView;
+import br.com.cams7.as.service.BaseService;
+import br.com.cams7.as.view.BaseView;
 import br.com.cams7.jpa.domain.BaseEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
@@ -26,29 +26,29 @@ import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
  * @author cams7
  *
  */
-public abstract class AALView/*<S extends BaseService<E, ?>, E extends BaseEntity<?>>
-		extends BaseView<S, E>*/implements Serializable {
+public abstract class AALView</*S extends BaseService<E, ?>,*/ E extends BaseEntity<?>>
+		extends BaseView</*S,*/ E> {
 
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
 	public AALView(
 			SingularAttribute<? extends BaseEntity<?>, ? extends BaseEntity<?>>... joins) {
-		//super(joins);
+		super(joins);
 	}
 
 	public void atualizaPino(ActionEvent event) {
-//		E entidade = getSelectedEntity();
-//
-//		Pin pino = (Pin) entidade;
-//
-//		final String MSG_ERROR_UPDATE = getMessageFromI18N(
-//				"error.msg.pin.update", pino.getId().getPinType().name(), pino
-//						.getId().getPin());
-//
-//		RequestContext context = RequestContext.getCurrentInstance();
-//		final String CALLBACK_PARAM = "arduinoAtualizado";
-//
+		E entidade = getSelectedEntity();
+
+		Pin pino = (Pin) entidade;
+
+		final String MSG_ERROR_UPDATE = getMessageFromI18N(
+				"error.msg.pin.update", pino.getId().getPinType().name(), pino
+						.getId().getPin());
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		final String CALLBACK_PARAM = "arduinoAtualizado";
+
 //		try {
 //
 //			Future<Boolean> call = ((AALService<E, ?>) getService())
@@ -78,8 +78,8 @@ public abstract class AALView/*<S extends BaseService<E, ?>, E extends BaseEntit
 	}
 
 	public void atualizaPinos(ActionEvent event) {
-//		final String MSG_ERROR_UPDATE = getMessageFromI18N("error.msg.pins.update");
-//
+		final String MSG_ERROR_UPDATE = getMessageFromI18N("error.msg.pins.update");
+
 //		List<E> pinos = getService().findAll();
 //		try {
 //			Future<Boolean> call = ((AALService<E, ?>) getService())
@@ -104,8 +104,8 @@ public abstract class AALView/*<S extends BaseService<E, ?>, E extends BaseEntit
 	}
 
 	public void sincronizaPinos(ActionEvent event) {
-//		final String MSG_ERROR_SYNCHRONIZE = getMessageFromI18N("error.msg.pins.synchronize");
-//
+		final String MSG_ERROR_SYNCHRONIZE = getMessageFromI18N("error.msg.pins.synchronize");
+
 //		List<E> pinos = getService().findAll();
 //		try {
 //			Future<Boolean> call = ((AALService<E, ?>) getService())

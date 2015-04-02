@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/layout/template.xhtml">
+
+	<ui:define name="template_head">
+		<style type="text/css">
+.ui-datatable .ui-datatable-header {
+	text-align: right !important;
+}
+
+.ui-button-text-only .ui-button-text {
+	/*padding: 0.3em 0.4em;*/
+	padding: 1px;
+}
+
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+	display: none;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="pageTitle">
+		<h:outputText value="#{msg['page.title.led.list']}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div style="border-bottom: 1px solid #E5E5E5;">
+			<h3>
+				<h:outputText value="#{msg['label.leds']}" />
+				<small> <h:outputText value="#{msg['label.list']}" /></small>
+			</h3>
+		</div>
+		<h:form id="form_led">
+			<p:growl id="all_messages" showDetail="true" life="5000" />
+
+			<p:dataTable var="led" value="#{ledView.lazyModel}" paginator="true"
+				rows="#{ledView.rows}" first="#{ledView.first}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowsPerPageTemplate="3,5,10,15" selectionMode="single"
+				selection="#{ledView.selectedEntity}" lazy="true"
+				emptyMessage="#{msg['led.not.found']}" widgetVar="ledsTable"
+				resizableColumns="true">
+
+				<p:ajax event="rowSelect" listener="#{ledView.onRowSelect}"
+					update=":form_led:ledDetail" onsuccess="PF('ledDialog').show();" />
+
+				<p:column headerText="#{msg['label.led.pin']}">
+					<h:outputText value="#{led.id.pinType} #{led.id.pin}"
+						title="#{msg['label.edit']} '#{led.id.pinType} #{led.id.pin}'" />
+				</p:column>
+
+				<p:column sortBy="#{led.cor}" filterBy="#{led.cor}"
+					filterMatchMode="in">
+					<f:facet name="filter">
+						<p:selectCheckboxMenu label="#{msg['label.led.color']}"
+							onchange="PF('ledsTable').filter()" panelStyle="width:125px"
+							scrollHeight="100" converter="corLEDConverter">
+							<f:selectItems value="#{ledView.cores}" />
+						</p:selectCheckboxMenu>
+					</f:facet>
+					<h:outputText value="#{led.cor}" />
+				</p:column>
+
+				<p:column sortBy="#{led.evento}" filterBy="#{led.evento}"
+					filterMatchMode="in">
+					<f:facet name="filter">
+						<p:selectCheckboxMenu label="#{msg['label.led.event']}"
+							onchange="PF('ledsTable').filter()" panelStyle="width:150px"
+							scrollHeight="100" converter="eventoConverter">
+							<f:selectItems value="#{ledView.eventos}" />
+						</p:selectCheckboxMenu>
+					</f:facet>
+					<h:outputText value="#{led.evento}" />
+				</p:column>
+
+				<p:column sortBy="#{led.intervalo}" filterBy="#{led.intervalo}"
+					filterMatchMode="in">
+					<f:facet name="filter">
+						<p:selectCheckboxMenu label="#{msg['label.led.interval']}"
+							onchange="PF('ledsTable').filter()" panelStyle="width:300px"
+							scrollHeight="260" converter="intervaloConverter">
+							<f:selectItems value="#{ledView.intervalos}" />
+						</p:selectCheckboxMenu>
+					</f:facet>
+					<h:outputText value="#{led.intervalo}" />
+				</p:column>
+
+				<p:column headerText="#{msg['label.led.activeByButton']}"
+					sortBy="#{led.ativadoPorBotao}" filterBy="#{led.ativadoPorBotao}"
+					filterMatchMode="equals">
+					<f:facet name="filter">
+						<p:selectOneButton onchange="PF('ledsTable').filter()">
+							<f:converter converterId="javax.faces.Boolean" />
+							<f:selectItem itemLabel="*" itemValue="" />
+							<f:selectItem itemLabel="#{msg['active.true']}" itemValue="true" />
+							<f:selectItem itemLabel="#{msg['active.false']}"
+								itemValue="false" />
+						</p:selectOneButton>
+					</f:facet>
+					<h:outputText
+						value="#{led.ativadoPorBotao ? msg['active.true']: msg['active.false']}" />
+				</p:column>
+
+				<p:column headerText="#{msg['label.led.active']}"
+					sortBy="#{led.ativo}" filterBy="#{led.ativo}"
+					filterMatchMode="equals">
+					<f:facet name="filter">
+						<p:selectOneButton onchange="PF('ledsTable').filter()">
+							<f:converter converterId="javax.faces.Boolean" />
+							<f:selectItem itemLabel="*" itemValue="" />
+							<f:selectItem itemLabel="#{msg['active.true']}" itemValue="true" />
+							<f:selectItem itemLabel="#{msg['active.false']}"
+								itemValue="false" />
+						</p:selectOneButton>
+					</f:facet>
+					<h:outputText
+						value="#{led.ativo ? msg['active.true']: msg['active.false']}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:panelGrid columns="3" columnClasses="value" style="width:100%">
+						<h:outputFormat value="#{msg['footer.led.total']}">
+							<f:param value="#{ledView.totalRows}" />
+						</h:outputFormat>
+
+						<p:commandButton value="#{msg['button.arduino.synchronize']}"
+							styleClass="btn btn-success"
+							actionListener="#{ledView.sincronizaPinos}"
+							oncomplete="PF('ledsTable').filter()"
+							update=":form_led:all_messages" />
+
+						<p:commandButton value="#{msg['button.arduino.update']}"
+							styleClass="btn btn-success"
+							actionListener="#{ledView.atualizaPinos}"
+							update=":form_led:all_messages" />
+					</p:panelGrid>
+				</f:facet>
+			</p:dataTable>
+
+			<p:dialog header="#{msg['title.led.edit']}" widgetVar="ledDialog"
+				modal="true" resizable="false">
+
+				<p:ajax event="close" listener="#{ledView.handleClose}" />
+
+				<ui:include src="led_form.xhtml">
+					<ui:param name="led" value="#{ledView.selectedEntity}" />
+				</ui:include>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
