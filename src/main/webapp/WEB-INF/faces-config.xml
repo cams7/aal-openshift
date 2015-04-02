@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+	<application>
+		<!-- configuracoes do locale (i18n) -->
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+			<supported-locale>en</supported-locale>
+			<supported-locale>pt_BR</supported-locale>
+		</locale-config>
+
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+	</application>
+
+	<!-- define uma lista para servir como MB para a tela sobre -->
+	<managed-bean>
+		<description>Sobre a aplicacao</description>
+		<managed-bean-name>sobreView</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<list-entries>
+			<value>about.title</value>
+			<value>about.built</value>
+			<value>about.site</value>
+			<value>about.build</value>
+		</list-entries>
+	</managed-bean>
+</faces-config>
