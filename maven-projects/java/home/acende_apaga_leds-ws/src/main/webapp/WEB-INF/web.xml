@@ -20,13 +20,13 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>aal_monitor</servlet-name>
+		<servlet-name>monitor</servlet-name>
 		<servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>aal_monitor</servlet-name>
-		<url-pattern>/aal_monitor</url-pattern>
+		<servlet-name>monitor</servlet-name>
+		<url-pattern>/monitor</url-pattern>
 	</servlet-mapping>
 
 

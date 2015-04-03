@@ -3,8 +3,7 @@
 	version="2.0">
 	<endpoint name="HelloServiceImpl" implementation="br.com.cams7.teste.ws.HelloServiceImpl"
 		url-pattern="/sayhello" />
-
-	<endpoint name="AppArduinoServiceImpl"
-		implementation="br.com.cams7.sisbarc.aal.ws.AppArduinoServiceImpl"
-		url-pattern="/aal_monitor" />
+	<endpoint name="MonitorServiceImpl"
+		implementation="br.com.cams7.sisbarc.aal.service.MonitorServiceImpl"
+		url-pattern="/monitor" />
 </endpoints>

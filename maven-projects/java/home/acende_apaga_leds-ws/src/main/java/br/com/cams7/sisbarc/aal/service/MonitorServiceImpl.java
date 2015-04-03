@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.cams7.sisbarc.aal.ws;
+package br.com.cams7.sisbarc.aal.service;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.sisbarc.aal.AppContextListener;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
@@ -16,22 +17,21 @@ import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
-import br.com.cams7.sisbarc.arduino.ArduinoException;
 
 /**
  * @author cams7
  *
  */
-@WebService(endpointInterface = "br.com.cams7.sisbarc.aal.ws.AppArduinoService")
-public class AppArduinoServiceImpl implements AppArduinoService {
+@WebService(endpointInterface = "br.com.cams7.sisbarc.aal.service.MonitorService")
+public class MonitorServiceImpl implements MonitorService {
 
 	@Resource
 	private WebServiceContext context;
 
-	private AppArduinoService getMonitor() {
+	private MonitorService getMonitor() {
 		ServletContext servletContext = (ServletContext) context
 				.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-		AppArduinoService monitor = (AppArduinoService) servletContext
+		MonitorService monitor = (MonitorService) servletContext
 				.getAttribute(AppContextListener.MONITOR);
 		return monitor;
 	}
@@ -43,8 +43,7 @@ public class AppArduinoServiceImpl implements AppArduinoService {
 	 */
 	@Override
 	public String getSerialPort() {
-		AppArduinoService monitor = getMonitor();
-		return monitor.getSerialPort();
+		return getMonitor().getSerialPort();
 	}
 
 	/*
@@ -54,8 +53,7 @@ public class AppArduinoServiceImpl implements AppArduinoService {
 	 */
 	@Override
 	public int getSerialBaudRate() {
-		AppArduinoService monitor = getMonitor();
-		return monitor.getSerialBaudRate();
+		return getMonitor().getSerialBaudRate();
 	}
 
 	/*
@@ -65,8 +63,7 @@ public class AppArduinoServiceImpl implements AppArduinoService {
 	 */
 	@Override
 	public long getSerialThreadTime() {
-		AppArduinoService monitor = getMonitor();
-		return monitor.getSerialThreadTime();
+		return getMonitor().getSerialThreadTime();
 	}
 
 	/*
@@ -76,8 +73,7 @@ public class AppArduinoServiceImpl implements AppArduinoService {
 	 */
 	@Override
 	public void init() throws ArduinoException {
-		AppArduinoService monitor = getMonitor();
-		monitor.init();
+		getMonitor().init();
 	}
 
 	/*
@@ -87,8 +83,7 @@ public class AppArduinoServiceImpl implements AppArduinoService {
 	 */
 	@Override
 	public void close() throws ArduinoException {
-		AppArduinoService monitor = getMonitor();
-		monitor.close();
+		getMonitor().close();
 	}
 
 	/*
@@ -98,76 +93,66 @@ public class AppArduinoServiceImpl implements AppArduinoService {
 	 */
 	@Override
 	public boolean isInitialized() {
-		AppArduinoService monitor = getMonitor();
-		return monitor.isInitialized();
+		return getMonitor().isInitialized();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * br.com.cams7.sisbarc.aal.ws.AppArduinoService#alteraEstadoLED(br.com.
+	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#alteraEstadoLED(br.com.
 	 * cams7.sisbarc.aal.jpa.domain.pk.PinPK,
 	 * br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED)
 	 */
 	@Override
 	public EstadoLED alteraEstadoLED(PinPK pinoId, EstadoLED estado) {
-		AppArduinoService monitor = getMonitor();
-		return monitor.alteraEstadoLED(pinoId, estado);
+		return getMonitor().alteraEstadoLED(pinoId, estado);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * br.com.cams7.sisbarc.aal.ws.AppArduinoService#buscaEstadoLED(br.com.cams7
+	 * br.com.cams7.sisbarc.aal.ws.MonitorService#buscaEstadoLED(br.com.cams7
 	 * .sisbarc.aal.jpa.domain.pk.PinPK)
 	 */
 	@Override
 	public LEDEntity[] buscaEstadoLEDs(PinPK[] ids) {
-		AppArduinoService monitor = getMonitor();
-		return monitor.buscaEstadoLEDs(ids);
+		return getMonitor().buscaEstadoLEDs(ids);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * br.com.cams7.sisbarc.aal.ws.AppArduinoService#alteraEvento(br.com.cams7
+	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#alteraEvento(br.com.cams7
 	 * .sisbarc.aal.jpa.domain.pk.PinPK,
 	 * br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento,
 	 * br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo)
 	 */
 	@Override
 	public Evento alteraEvento(PinPK pinoId, Evento evento, Intervalo intervalo) {
-		AppArduinoService monitor = getMonitor();
-		return monitor.alteraEvento(pinoId, evento, intervalo);
+		return getMonitor().alteraEvento(pinoId, evento, intervalo);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * br.com.cams7.sisbarc.aal.ws.AppArduinoService#alteraEventos(java.util
+	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#alteraEventos(java.util
 	 * .List)
 	 */
 	@Override
 	public Pin[] alteraEventos(Pin[] pinos) {
-		AppArduinoService monitor = getMonitor();
-		return monitor.alteraEventos(pinos);
+		return getMonitor().alteraEventos(pinos);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * br.com.cams7.sisbarc.aal.ws.AppArduinoService#buscaDados(br.com.cams7
+	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#buscaDados(br.com.cams7
 	 * .sisbarc.aal.jpa.domain.pk.PinPK)
 	 */
 	@Override
 	public Pin[] buscaDados(PinPK[] ids) {
-		AppArduinoService monitor = getMonitor();
-		return monitor.buscaDados(ids);
+		return getMonitor().buscaDados(ids);
 	}
 
 }

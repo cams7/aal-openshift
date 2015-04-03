@@ -6,6 +6,7 @@ package br.com.cams7.sisbarc.aal;
 //import java.util.Hashtable;
 import java.util.logging.Level;
 
+import br.com.cams7.arduino.ArduinoException;
 //import javax.naming.Context;
 //import javax.naming.InitialContext;
 //import javax.naming.NamingException;
@@ -17,8 +18,7 @@ import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
-import br.com.cams7.sisbarc.aal.ws.AppArduinoService;
-import br.com.cams7.sisbarc.arduino.ArduinoException;
+import br.com.cams7.sisbarc.aal.service.MonitorService;
 import br.com.cams7.sisbarc.arduino.ArduinoServiceImpl;
 import br.com.cams7.sisbarc.arduino.vo.Arduino;
 import br.com.cams7.sisbarc.arduino.vo.Arduino.ArduinoEvent;
@@ -32,7 +32,7 @@ import br.com.cams7.sisbarc.arduino.vo.EEPROMData;
  *
  */
 public class ArduinoMonitor extends ArduinoServiceImpl implements
-		AppArduinoService {
+		MonitorService {
 
 	private final byte D13_LED_PISCA = 13; // Pino 13 Digital
 

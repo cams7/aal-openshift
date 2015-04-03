@@ -1,5 +1,6 @@
 package br.com.cams7.sisbarc.arduino;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.arduino.ArduinoPinType;
 import br.com.cams7.sisbarc.arduino.util.Binary;
 import br.com.cams7.sisbarc.arduino.util.Checksum;

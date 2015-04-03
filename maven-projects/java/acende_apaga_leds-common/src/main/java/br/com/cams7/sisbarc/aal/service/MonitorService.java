@@ -1,30 +1,30 @@
 /**
  * 
  */
-package br.com.cams7.sisbarc.aal.ws;
+package br.com.cams7.sisbarc.aal.service;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.Style;
 
+import br.com.cams7.arduino.ArduinoService;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
-import br.com.cams7.sisbarc.arduino.ArduinoService;
 
 /**
- * @author cesar
+ * @author cams7
  *
  */
-@WebService
-@SOAPBinding(style = Style.RPC)
-// @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use =
-// SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
-public interface AppArduinoService extends ArduinoService {
+@WebService(name = MonitorService.WEBSERVICE_NAME, targetNamespace = MonitorService.WEBSERVICE_TARGETNAMESPACE)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
+public interface MonitorService extends ArduinoService {
+
+	public static final String WEBSERVICE_NAME = "MonitorService";
+	public static final String WEBSERVICE_TARGETNAMESPACE = "http://service.aal.sisbarc.cams7.com.br/";
 
 	/**
 	 * Altera o ESTADO do LED para ACESO ou APAGADO

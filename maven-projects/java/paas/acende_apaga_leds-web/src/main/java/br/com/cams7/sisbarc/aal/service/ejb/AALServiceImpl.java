@@ -24,10 +24,8 @@ import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
-import br.com.cams7.sisbarc.aal.service.ws.AppArduinoService;
-import br.com.cams7.sisbarc.aal.service.ws.AppArduinoServiceImplService;
-import br.com.cams7.sisbarc.aal.service.ws.PinArray;
-import br.com.cams7.sisbarc.aal.service.ws.PinPKArray;
+import br.com.cams7.sisbarc.aal.service.MonitorService;
+import br.com.cams7.sisbarc.aal.ws.MonitorServiceImplService;
 
 /**
  * @author cams7
@@ -39,8 +37,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@PersistenceContext(unitName = "acendeApagaLEDsUnit")
 	private EntityManager entityManager;
 
-	@WebServiceRef(value = AppArduinoServiceImplService.class)
-	private AppArduinoService monitor;
+	@WebServiceRef(value = MonitorServiceImplService.class)
+	private MonitorService service;
 
 	public AALServiceImpl() {
 		super();
@@ -50,7 +48,7 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	private void init() {
 		getLog().info("Initialize EJB");
 
-		Map<String, Object> context = ((BindingProvider) monitor)
+		Map<String, Object> context = ((BindingProvider) service)
 				.getRequestContext();
 
 		// 192.168.1.50:8080
@@ -59,7 +57,7 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 				.setParameter("id", (short) 1).getSingleResult();
 		if (url != null) {
 			final String WSDL_LOCATION = "http://" + url
-					+ "/acende_apaga_leds/aal_monitor";
+					+ "/acende_apaga_leds/monitor?wsdl";
 
 			getLog().info("WSDL: " + WSDL_LOCATION);
 
@@ -73,22 +71,22 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 		getLog().info("Terminate EJB");
 	}
 
-	protected PinPKArray getIDs(List<E> entidades) {
-		PinPKArray array = new PinPKArray();
+	protected PinPK[] getIDs(List<E> entidades) {
+		PinPK[] ids = new PinPK[entidades.size()];
 
-		for (E entidade : entidades)
-			array.getItem().add((PinPK) entidade.getId());
+		for (short i = 0; i < entidades.size(); i++)
+			ids[i] = (PinPK) entidades.get(i).getId();
 
-		return array;
+		return ids;
 	}
 
-	protected PinArray getPinos(List<E> entidades) {
-		PinArray array = new PinArray();
+	protected Pin[] getPinos(List<E> entidades) {
+		Pin[] pinos = new Pin[entidades.size()];
 
-		for (E entidade : entidades)
-			array.getItem().add((Pin) entidade);
-		return array;
+		for (short i = 0; i < entidades.size(); i++)
+			pinos[i] = (Pin) entidades.get(i);
 
+		return pinos;
 	}
 
 	/*
@@ -102,11 +100,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	public Future<Boolean> atualizaPino(E entidade) {
 		Pin pino = (Pin) entidade;
 
-		PinPK id = pino.getId();
-		Evento evento = pino.getEvento();
-		Intervalo intervalo = pino.getIntervalo();
-
-		evento = getMonitor().alteraEvento(id, evento, intervalo);
+		Evento evento = getMonitor().alteraEvento(pino.getId(),
+				pino.getEvento(), pino.getIntervalo());
 
 		Boolean arduinoRun = Boolean.FALSE;
 
@@ -136,11 +131,11 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 */
 	@Asynchronous
 	public Future<Boolean> sincronizaEventos(List<E> entidades) {
-		PinArray array = getMonitor().buscaDados(getIDs(entidades));
+		Pin[] pinos = getMonitor().buscaDados(getIDs(entidades));
 
 		Boolean arduinoRun = Boolean.TRUE;
 
-		for (Pin p : array.getItem()) {
+		for (Pin p : pinos) {
 			if (p.getEvento() == null && p.getIntervalo() == null) {
 				arduinoRun = Boolean.FALSE;
 				break;
@@ -180,11 +175,11 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 */
 	@Asynchronous
 	public Future<Boolean> alteraEventos(List<E> entidades) {
-		PinArray array = getMonitor().alteraEventos(getPinos(entidades));
+		Pin[] pinos = getMonitor().alteraEventos(getPinos(entidades));
 
 		Boolean arduinoRun = Boolean.TRUE;
 
-		for (Pin pino : array.getItem())
+		for (Pin pino : pinos)
 			if (pino.getEvento() == null) {
 				arduinoRun = Boolean.FALSE;
 				break;
@@ -204,8 +199,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 		return entityManager;
 	}
 
-	protected AppArduinoService getMonitor() {
-		return monitor;
+	protected MonitorService getMonitor() {
+		return service;
 	}
 
 }

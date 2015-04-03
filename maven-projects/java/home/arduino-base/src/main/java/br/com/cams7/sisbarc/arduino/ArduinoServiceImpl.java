@@ -26,7 +26,9 @@ import br.com.cams7.sisbarc.arduino.vo.Arduino.ArduinoTransmitter;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoEEPROM;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoEEPROMRead;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoEEPROMWrite;
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.arduino.ArduinoPinType;
+import br.com.cams7.arduino.ArduinoService;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoUSART;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoUSARTMessage;
 

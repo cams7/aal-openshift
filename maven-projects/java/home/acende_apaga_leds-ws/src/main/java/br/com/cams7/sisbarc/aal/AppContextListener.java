@@ -11,8 +11,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import br.com.cams7.sisbarc.aal.ws.AppArduinoService;
-import br.com.cams7.sisbarc.arduino.ArduinoException;
+import br.com.cams7.arduino.ArduinoException;
+import br.com.cams7.sisbarc.aal.service.MonitorService;
 
 /**
  * @author cams7
@@ -49,7 +49,7 @@ public class AppContextListener implements ServletContextListener {
 			LOG.log(Level.SEVERE, e.getMessage());
 		}
 
-		AppArduinoService monitor = (AppArduinoService) servletContext
+		MonitorService monitor = (MonitorService) servletContext
 				.getAttribute(MONITOR);
 		if (monitor != null)
 			try {
@@ -69,7 +69,7 @@ public class AppContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 		ServletContext servletContext = event.getServletContext();
-		AppArduinoService monitor = (AppArduinoService) servletContext
+		MonitorService monitor = (MonitorService) servletContext
 				.getAttribute(MONITOR);
 
 		if (monitor != null)
