@@ -40,7 +40,7 @@
 		<connection>scm:git:https://github.com/cams7/aal-openshift.git</connection>
 	</scm>
 	
-	<build>	
+	<build>		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -63,6 +63,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>1.0.2.Final</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>						
 			</plugin>
 		</plugins>			
 	</build>
@@ -99,7 +108,7 @@
 								</manifestEntries>
 							</archive>
 						</configuration>
-					</plugin>			
+					</plugin>				
 				</plugins>						
 			</build>
 		</profile>
@@ -117,9 +126,9 @@
 							<outputDirectory>deployments</outputDirectory>
 							<warName>ROOT</warName>
 						</configuration>
-					</plugin>
+					</plugin>					
 				</plugins>
 			</build>
-		</profile>				
+		</profile>			
 	</profiles>
 </project>

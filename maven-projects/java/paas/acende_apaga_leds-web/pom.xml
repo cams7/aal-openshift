@@ -13,7 +13,7 @@
 	<packaging>war</packaging>
 
 	<name>Acende Apaga LEDs - WEB</name>
-	<description></description>
+	<description>Acende ou Apaga os LEDs</description>
 			
 	<dependencies>
 		<dependency>
@@ -33,6 +33,19 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-		</dependency>
+		</dependency>		
 	</dependencies>	
+	
+	<build>
+		<finalName>acende_apaga_leds</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>			
+		</plugins>
+	</build>
 </project>

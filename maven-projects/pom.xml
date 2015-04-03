@@ -35,6 +35,6 @@
 		
 		<profile>
 			<id>openshift</id>				
-		</profile>						
+		</profile>			
 	</profiles>
 </project>
