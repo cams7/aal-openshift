@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>br.com.cams7.sisbarc</groupId>
+		<artifactId>java</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>acende_apaga_leds-common</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Biblioteca comum ao projeto 'acende_apaga_leds'</name>
+	<description>Biblioteca comum ao projeto 'acende_apaga_leds'</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>br.com.cams7</groupId>
+			<artifactId>app-base</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>br.com.cams7.sisbarc</groupId>
+			<artifactId>acende_apaga_leds-jpa</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

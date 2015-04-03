@@ -16,6 +16,7 @@ import javax.ejb.Asynchronous;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.WebServiceRef;
 
 import br.com.cams7.as.service.BaseServiceImpl;
 import br.com.cams7.jpa.domain.BaseEntity;
@@ -38,6 +39,9 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@PersistenceContext(unitName = "acendeApagaLEDsUnit")
 	private EntityManager entityManager;
 
+	@WebServiceRef(value = AppArduinoServiceImplService.class)
+	private AppArduinoService monitor;
+
 	public AALServiceImpl() {
 		super();
 	}
@@ -45,16 +49,6 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@PostConstruct
 	private void init() {
 		getLog().info("Initialize EJB");
-	}
-
-	@PreDestroy
-	private void close() {
-		getLog().info("Terminate EJB");
-	}
-
-	protected AppArduinoService getMonitor() {
-		AppArduinoService monitor = (new AppArduinoServiceImplService())
-				.getAppArduinoServiceImplPort();
 
 		Map<String, Object> context = ((BindingProvider) monitor)
 				.getRequestContext();
@@ -63,17 +57,20 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 		String url = (String) getEntityManager()
 				.createNamedQuery("Usuario.buscaWSDLLocation")
 				.setParameter("id", (short) 1).getSingleResult();
-		if (url == null)
-			return null;
+		if (url != null) {
+			final String WSDL_LOCATION = "http://" + url
+					+ "/acende_apaga_leds/aal_monitor";
 
-		final String WSDL_LOCATION = "http://" + url
-				+ "/acende_apaga_leds/aal_monitor";
+			getLog().info("WSDL: " + WSDL_LOCATION);
 
-		getLog().info("WSDL: " + WSDL_LOCATION);
+			context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+					WSDL_LOCATION);
+		}
+	}
 
-		context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, WSDL_LOCATION);
-
-		return monitor;
+	@PreDestroy
+	private void close() {
+		getLog().info("Terminate EJB");
 	}
 
 	protected PinPKArray getIDs(List<E> entidades) {
@@ -105,13 +102,11 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	public Future<Boolean> atualizaPino(E entidade) {
 		Pin pino = (Pin) entidade;
 
-		AppArduinoService monitor = getMonitor();
-
 		PinPK id = pino.getId();
 		Evento evento = pino.getEvento();
 		Intervalo intervalo = pino.getIntervalo();
 
-		evento = monitor.alteraEvento(id, evento, intervalo);
+		evento = getMonitor().alteraEvento(id, evento, intervalo);
 
 		Boolean arduinoRun = Boolean.FALSE;
 
@@ -141,9 +136,7 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 */
 	@Asynchronous
 	public Future<Boolean> sincronizaEventos(List<E> entidades) {
-		AppArduinoService monitor = getMonitor();
-
-		PinArray array = monitor.buscaDados(getIDs(entidades));
+		PinArray array = getMonitor().buscaDados(getIDs(entidades));
 
 		Boolean arduinoRun = Boolean.TRUE;
 
@@ -187,9 +180,7 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 */
 	@Asynchronous
 	public Future<Boolean> alteraEventos(List<E> entidades) {
-		AppArduinoService monitor = getMonitor();
-
-		PinArray array = monitor.alteraEventos(getPinos(entidades));
+		PinArray array = getMonitor().alteraEventos(getPinos(entidades));
 
 		Boolean arduinoRun = Boolean.TRUE;
 
@@ -211,6 +202,10 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@Override
 	protected EntityManager getEntityManager() {
 		return entityManager;
+	}
+
+	protected AppArduinoService getMonitor() {
+		return monitor;
 	}
 
 }

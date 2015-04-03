@@ -17,7 +17,8 @@
 
 	<modules>
 		<module>app-base</module>
-		<module>acende_apaga_leds-jpa</module>		
+		<module>acende_apaga_leds-jpa</module>	
+		<module>acende_apaga_leds-common</module>
 		<module>paas</module>
 	</modules>
 
@@ -35,7 +36,14 @@
 				<artifactId>acende_apaga_leds-jpa</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
-			</dependency>			
+			</dependency>	
+
+			<dependency>
+				<groupId>br.com.cams7.sisbarc</groupId>
+				<artifactId>acende_apaga_leds-common</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

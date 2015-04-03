@@ -23,10 +23,12 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.WebServiceRef;
 import javax.xml.ws.handler.MessageContext;
 
-import org.jboss.as.quickstarts.ear.ws.HelloService;
 import org.jboss.as.quickstarts.ear.ws.HelloServiceImplService;
+
+import br.com.cams7.teste.ws.HelloService;
 
 /**
  * A simple Hello World EJB. The EJB does not use an interface.
@@ -37,6 +39,9 @@ import org.jboss.as.quickstarts.ear.ws.HelloServiceImplService;
 public class GreeterEJB {
 	private final String IP = "200.141.84.2";
 
+	@WebServiceRef(value = HelloServiceImplService.class)
+	private HelloService port;
+
 	/**
 	 * This method takes a name and returns a personalised greeting.
 	 * 
@@ -45,9 +50,6 @@ public class GreeterEJB {
 	 * @return the personalised greeting.
 	 */
 	public String sayHello(String name) {
-		HelloService port = (new HelloServiceImplService())
-				.getHelloServiceImplPort();
-
 		Map<String, Object> context = ((BindingProvider) port)
 				.getRequestContext();
 
@@ -57,9 +59,6 @@ public class GreeterEJB {
 		case "leandro":
 			appPort = "8383";
 			break;
-		// case "kercia":
-		// appPort = "8282";
-		// break;
 		case "vbox":
 			appPort = "8081";
 			break;

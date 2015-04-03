@@ -18,6 +18,7 @@ public class HelloServiceImpl implements HelloService {
 
 	@Override
 	public String printMessage(String message) {
+
 		MessageContext messageContext = serviceContext.getMessageContext();
 
 		// get detail from request headers
