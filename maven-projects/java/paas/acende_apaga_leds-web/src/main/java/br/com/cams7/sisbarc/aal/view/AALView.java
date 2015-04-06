@@ -12,6 +12,7 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.as.service.BaseService;
 import br.com.cams7.as.view.BaseView;
 import br.com.cams7.jpa.domain.BaseEntity;
@@ -19,6 +20,7 @@ import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.service.ejb.AALService;
+import br.com.cams7.util.AppUtil;
 
 /**
  * @author cams7
@@ -66,13 +68,13 @@ public abstract class AALView<S extends BaseService<E, ?>, E extends BaseEntity<
 				context.addCallbackParam(CALLBACK_PARAM, false);
 			}
 		} catch (InterruptedException | ExecutionException e) {
-			addERRORMessage(MSG_ERROR_UPDATE, e.getMessage());
+			addERRORMessage(MSG_ERROR_UPDATE,
+					AppUtil.getExceptionMessage(e.getMessage()));
 			context.addCallbackParam(CALLBACK_PARAM, false);
-		} catch (NullPointerException e) {
-			addMessageMonitorNotRun(MSG_ERROR_UPDATE);
+		} catch (ArduinoException e) {
+			addMessageMonitorNotRun(MSG_ERROR_UPDATE, e.getMessage());
 			context.addCallbackParam(CALLBACK_PARAM, false);
 		}
-
 	}
 
 	public void atualizaPinos(ActionEvent event) {
@@ -94,11 +96,11 @@ public abstract class AALView<S extends BaseService<E, ?>, E extends BaseEntity<
 				addMessageArduinoNotRun(MSG_ERROR_UPDATE);
 
 		} catch (InterruptedException | ExecutionException e) {
-			addERRORMessage(MSG_ERROR_UPDATE, e.getMessage());
-		} catch (NullPointerException e) {
-			addMessageMonitorNotRun(MSG_ERROR_UPDATE);
+			addERRORMessage(MSG_ERROR_UPDATE,
+					AppUtil.getExceptionMessage(e.getMessage()));
+		} catch (ArduinoException e) {
+			addMessageMonitorNotRun(MSG_ERROR_UPDATE, e.getMessage());
 		}
-
 	}
 
 	public void sincronizaPinos(ActionEvent event) {
@@ -120,11 +122,11 @@ public abstract class AALView<S extends BaseService<E, ?>, E extends BaseEntity<
 				addMessageArduinoNotRun(MSG_ERROR_SYNCHRONIZE);
 
 		} catch (InterruptedException | ExecutionException e) {
-			addERRORMessage(MSG_ERROR_SYNCHRONIZE, e.getMessage());
-		} catch (NullPointerException e) {
-			addMessageMonitorNotRun(MSG_ERROR_SYNCHRONIZE);
+			addERRORMessage(MSG_ERROR_SYNCHRONIZE,
+					AppUtil.getExceptionMessage(e.getMessage()));
+		} catch (ArduinoException e) {
+			addMessageMonitorNotRun(MSG_ERROR_SYNCHRONIZE, e.getMessage());
 		}
-
 	}
 
 	public Evento[] getEventos() {

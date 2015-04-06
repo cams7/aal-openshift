@@ -6,34 +6,33 @@ package br.com.cams7.sisbarc.aal.rest;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.arduino.ArduinoPinType;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
 import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
+import br.com.cams7.util.AppException;
+import br.com.cams7.util.AppUtil;
 
 /**
  * @author cams7
  *
  */
-@Path("/arduino")
+@Path("/")
 @RequestScoped
 public class ArduinoResourceRESTService {
-
-	@Inject
-	private Logger log;
 
 	@EJB
 	private LEDService service;
@@ -44,7 +43,7 @@ public class ArduinoResourceRESTService {
 	@GET
 	@Path("/led")
 	@Produces(MediaType.APPLICATION_JSON)
-	public LEDEntity alteraLEDEstado(
+	public Response alteraLEDEstado(
 			@QueryParam("tipo_pino") String stringTipoPino,
 			@QueryParam("pino") String stringPino,
 			@QueryParam("estado") String stringEstado) {
@@ -55,32 +54,60 @@ public class ArduinoResourceRESTService {
 		LEDEntity led = service.findOne(new PinPK(tipoPino, pino));
 		led.setEstado(EstadoLED.valueOf(stringEstado));
 
+		Response.ResponseBuilder builder;
+
 		try {
 			Future<LEDEntity> call = service.alteraLEDEstado(led);
-			return call.get();
+			led = call.get();
+			builder = Response.status(Response.Status.OK).entity(led);
 		} catch (InterruptedException | ExecutionException e) {
-			log.log(Level.SEVERE, e.getMessage());
-		} catch (NullPointerException e) {
-			log.log(Level.WARNING, e.getMessage());
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(AppUtil.getExceptionMessage(e.getMessage()));
+		} catch (ArduinoException e) {
+			builder = Response.status(Response.Status.NOT_FOUND).entity(
+					e.getMessage());
 		}
 
-		return null;
+		return builder.build();
 	}
 
 	@GET
 	@Path("/leds")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<LEDEntity> getLEDs() {
+	public Response getLEDs() {
+
+		Response.ResponseBuilder builder;
 		try {
 			Future<List<LEDEntity>> call = service.getLEDsAtivadoPorBotao();
-			return call.get();
+			List<LEDEntity> leds = call.get();
+
+			builder = Response.status(Response.Status.OK).entity(leds);
 		} catch (InterruptedException | ExecutionException e) {
-			log.log(Level.SEVERE, e.getMessage());
-		} catch (NullPointerException e) {
-			log.log(Level.WARNING, e.getMessage());
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(AppUtil.getExceptionMessage(e.getMessage()));
+		} catch (ArduinoException e) {
+			builder = Response.status(Response.Status.NOT_FOUND).entity(
+					e.getMessage());
 		}
 
-		return null;
+		return builder.build();
+	}
+
+	@GET
+	@Path("/led/{pino : \\d+}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getEstadoLEDAtivadoPorBotao(@PathParam("pino") byte pin) {
+
+		Response.ResponseBuilder builder;
+		try {
+			EstadoLED estado = service.getEstadoLEDAtivadoPorBotao(pin);
+			builder = Response.status(Response.Status.OK).entity(estado);
+		} catch (AppException e) {
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(e.getMessage());
+		}
+
+		return builder.build();
 	}
 
 }

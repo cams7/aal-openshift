@@ -39,7 +39,7 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.arduino.ArduinoService#getSerialPort()
+	 * @see br.com.cams7.arduino.ArduinoService#getSerialPort()
 	 */
 	@Override
 	public String getSerialPort() {
@@ -49,7 +49,7 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.arduino.ArduinoService#getSerialBaudRate()
+	 * @see br.com.cams7.arduino.ArduinoService#getSerialBaudRate()
 	 */
 	@Override
 	public int getSerialBaudRate() {
@@ -59,7 +59,7 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.arduino.ArduinoService#getSerialThreadTime()
+	 * @see br.com.cams7.arduino.ArduinoService#getSerialThreadTime()
 	 */
 	@Override
 	public long getSerialThreadTime() {
@@ -69,7 +69,7 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.arduino.ArduinoService#init()
+	 * @see br.com.cams7.arduino.ArduinoService#init()
 	 */
 	@Override
 	public void init() throws ArduinoException {
@@ -79,7 +79,7 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.arduino.ArduinoService#close()
+	 * @see br.com.cams7.arduino.ArduinoService#close()
 	 */
 	@Override
 	public void close() throws ArduinoException {
@@ -89,7 +89,7 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.arduino.ArduinoService#isInitialized()
+	 * @see br.com.cams7.arduino.ArduinoService#isInitialized()
 	 */
 	@Override
 	public boolean isInitialized() {
@@ -99,12 +99,14 @@ public class MonitorServiceImpl implements MonitorService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#alteraEstadoLED(br.com.
-	 * cams7.sisbarc.aal.jpa.domain.pk.PinPK,
+	 * @see
+	 * br.com.cams7.sisbarc.aal.service.MonitorService#alteraEstadoLED(br.com
+	 * .cams7.sisbarc.aal.jpa.domain.pk.PinPK,
 	 * br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED)
 	 */
 	@Override
-	public EstadoLED alteraEstadoLED(PinPK pinoId, EstadoLED estado) {
+	public EstadoLED alteraEstadoLED(PinPK pinoId, EstadoLED estado)
+			throws ArduinoException {
 		return getMonitor().alteraEstadoLED(pinoId, estado);
 	}
 
@@ -112,46 +114,50 @@ public class MonitorServiceImpl implements MonitorService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * br.com.cams7.sisbarc.aal.ws.MonitorService#buscaEstadoLED(br.com.cams7
-	 * .sisbarc.aal.jpa.domain.pk.PinPK)
+	 * br.com.cams7.sisbarc.aal.service.MonitorService#buscaEstadoLEDs(br.com
+	 * .cams7.sisbarc.aal.jpa.domain.pk.PinPK[])
 	 */
 	@Override
-	public LEDEntity[] buscaEstadoLEDs(PinPK[] ids) {
+	public LEDEntity[] buscaEstadoLEDs(PinPK[] ids) throws ArduinoException {
 		return getMonitor().buscaEstadoLEDs(ids);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#alteraEvento(br.com.cams7
+	 * @see
+	 * br.com.cams7.sisbarc.aal.service.MonitorService#alteraEvento(br.com.cams7
 	 * .sisbarc.aal.jpa.domain.pk.PinPK,
 	 * br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento,
 	 * br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo)
 	 */
 	@Override
-	public Evento alteraEvento(PinPK pinoId, Evento evento, Intervalo intervalo) {
+	public Evento alteraEvento(PinPK pinoId, Evento evento, Intervalo intervalo)
+			throws ArduinoException {
 		return getMonitor().alteraEvento(pinoId, evento, intervalo);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#alteraEventos(java.util
-	 * .List)
+	 * @see
+	 * br.com.cams7.sisbarc.aal.service.MonitorService#alteraEventos(br.com.
+	 * cams7.sisbarc.aal.jpa.domain.Pin[])
 	 */
 	@Override
-	public Pin[] alteraEventos(Pin[] pinos) {
+	public Pin[] alteraEventos(Pin[] pinos) throws ArduinoException {
 		return getMonitor().alteraEventos(pinos);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.cams7.sisbarc.aal.ws.MonitorService#buscaDados(br.com.cams7
-	 * .sisbarc.aal.jpa.domain.pk.PinPK)
+	 * @see
+	 * br.com.cams7.sisbarc.aal.service.MonitorService#buscaDados(br.com.cams7
+	 * .sisbarc.aal.jpa.domain.pk.PinPK[])
 	 */
 	@Override
-	public Pin[] buscaDados(PinPK[] ids) {
+	public Pin[] buscaDados(PinPK[] ids) throws ArduinoException {
 		return getMonitor().buscaDados(ids);
 	}
 

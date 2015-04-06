@@ -38,6 +38,12 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 	private static final long serialVersionUID = 1L;
 	private final String RESOURCE_BUNDLE = "messages";
 
+	// @Inject
+	// private ResourceBundle bundle;
+
+	// @Inject
+	// private FacesContext facesContext;
+
 	private final byte ENTITY_ARGUMENT_NUMBER = 1;
 
 	private LazyDataModel<E> lazyModel;
@@ -159,6 +165,7 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 	private void addMessage(Severity severity, String summary, String detail) {
 		FacesMessage message = new FacesMessage(severity, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
+		// facesContext.addMessage(null, message);
 	}
 
 	protected void addINFOMessage(String summary, String detail) {
@@ -166,9 +173,9 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 		getLog().info(detail);
 	}
 
-	protected void addWARNMessage(String summary, String detail) {
+	protected void addWARNMessage(String summary, String detail, String message) {
 		addMessage(FacesMessage.SEVERITY_WARN, summary, detail);
-		getLog().log(Level.WARNING, detail);
+		getLog().log(Level.WARNING, message != null ? message : detail);
 	}
 
 	protected void addERRORMessage(String summary, String detail) {
@@ -176,14 +183,18 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 		getLog().log(Level.SEVERE, detail);
 	}
 
-	protected void addMessageMonitorNotRun(String detail) {
+	protected void addMessageMonitorNotRun(String detail, String message) {
 		String summary = getMessageFromI18N("error.msg.monitor.not.run");// Resumo
-		addWARNMessage(summary, detail);
+		addWARNMessage(summary, detail, message);
+	}
+
+	protected void addMessageArduinoNotRun(String detail, String message) {
+		String summary = getMessageFromI18N("error.msg.arduino.not.run");// Resumo
+		addWARNMessage(summary, detail, message);
 	}
 
 	protected void addMessageArduinoNotRun(String detail) {
-		String summary = getMessageFromI18N("error.msg.arduino.not.run");// Resumo
-		addWARNMessage(summary, detail);
+		addMessageArduinoNotRun(detail, null);
 	}
 
 	/**

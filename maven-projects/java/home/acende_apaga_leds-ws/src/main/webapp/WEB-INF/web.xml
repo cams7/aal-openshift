@@ -6,8 +6,7 @@
 	<description>Acende Apaga LEDs</description>
 	<listener>
 		<listener-class>
-			com.sun.xml.ws.transport.http.servlet.WSServletContextListener
-		</listener-class>
+			com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
 	</listener>
 	<servlet>
 		<servlet-name>sayhello</servlet-name>
@@ -28,7 +27,6 @@
 		<servlet-name>monitor</servlet-name>
 		<url-pattern>/monitor</url-pattern>
 	</servlet-mapping>
-
 
 	<session-config>
 		<session-timeout>30</session-timeout>

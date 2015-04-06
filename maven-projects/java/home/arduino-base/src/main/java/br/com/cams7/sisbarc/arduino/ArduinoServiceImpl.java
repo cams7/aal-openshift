@@ -156,7 +156,7 @@ public abstract class ArduinoServiceImpl implements ArduinoService, Runnable,
 	 */
 	private void serialWrite(byte[] data) throws ArduinoException {
 		if (output == null)
-			throw new ArduinoException("O 'OutputStream' nao foi inicializado");
+			throw new ArduinoException("O Arduino nao esta conectado");
 
 		try {
 			// escreve o valor na porta serial para ser enviado

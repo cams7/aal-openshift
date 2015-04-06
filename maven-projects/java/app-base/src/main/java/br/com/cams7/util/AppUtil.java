@@ -367,4 +367,10 @@ public final class AppUtil {
 		return map;
 	}
 
+	public static String getExceptionMessage(String message) {
+		String[] array = message.split(":");
+		message = array[array.length - 1];
+		return message.trim();
+	}
+
 }

@@ -8,17 +8,20 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.arduino.ArduinoPinType;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity_;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
+import br.com.cams7.util.AppException;
 
 @Stateless
 @Local(LEDService.class)
@@ -30,7 +33,8 @@ public class LEDServiceImpl extends AALServiceImpl<LEDEntity, PinPK> implements
 	}
 
 	@Asynchronous
-	public Future<LEDEntity> alteraLEDEstado(LEDEntity led) {
+	public Future<LEDEntity> alteraLEDEstado(LEDEntity led)
+			throws ArduinoException {
 		if (led.getEstado() == EstadoLED.ACESO && !led.isAtivo()) {
 			led.setEstado(EstadoLED.APAGADO);
 		} else {
@@ -53,7 +57,8 @@ public class LEDServiceImpl extends AALServiceImpl<LEDEntity, PinPK> implements
 		return new AsyncResult<LEDEntity>(led);
 	}
 
-	public Future<List<LEDEntity>> getLEDsAtivadoPorBotao() {
+	public Future<List<LEDEntity>> getLEDsAtivadoPorBotao()
+			throws ArduinoException {
 		@SuppressWarnings("unchecked")
 		List<LEDEntity> leds = getEntityManager().createNamedQuery(
 				"Led.buscaLEDsAtivadoPorBotao").getResultList();
@@ -74,7 +79,7 @@ public class LEDServiceImpl extends AALServiceImpl<LEDEntity, PinPK> implements
 		return new AsyncResult<List<LEDEntity>>(leds);
 	}
 
-	public EstadoLED getEstadoLEDAtivadoPorBotao(byte pin) {
+	public EstadoLED getEstadoLEDAtivadoPorBotao(byte pin) throws AppException {
 		CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Boolean> criteria = builder.createQuery(Boolean.class);
 
@@ -92,11 +97,15 @@ public class LEDServiceImpl extends AALServiceImpl<LEDEntity, PinPK> implements
 		criteria.where(and);
 
 		TypedQuery<Boolean> query = getEntityManager().createQuery(criteria);
-		Boolean active = query.getSingleResult();
-		if (active == Boolean.TRUE)
-			return EstadoLED.ACESO;
+		try {
+			Boolean active = query.getSingleResult();
+			if (active == Boolean.TRUE)
+				return EstadoLED.ACESO;
 
-		return EstadoLED.APAGADO;
+			return EstadoLED.APAGADO;
+		} catch (NoResultException e) {
+			throw new AppException(e.getMessage(), e.getCause());
+		}
 	}
 
 }

@@ -14,14 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.kitchensink_ear.util;
+package br.com.cams7.util;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 
 /**
- * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans
+ * This class uses CDI to alias Java EE resources, such as the persistence
+ * context, to CDI beans
  * 
  * <p>
  * Example injection on a managed bean field:
@@ -34,10 +38,20 @@ import javax.faces.context.FacesContext;
  */
 public class WebResources {
 
-    @Produces
-    @RequestScoped
-    public FacesContext produceFacesContext() {
-        return FacesContext.getCurrentInstance();
-    }
+	private static final String RESOURCE_BUNDLE = "messages";
+
+	@Produces
+	@RequestScoped
+	public FacesContext produceFacesContext() {
+		return FacesContext.getCurrentInstance();
+	}
+
+	@Produces
+	public ResourceBundle produceResourceBundle() {
+		Locale locale = FacesContext.getCurrentInstance().getViewRoot()
+				.getLocale();
+
+		return ResourceBundle.getBundle(RESOURCE_BUNDLE, locale);
+	}
 
 }

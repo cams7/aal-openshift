@@ -18,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceRef;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.as.service.BaseServiceImpl;
 import br.com.cams7.jpa.domain.BaseEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
@@ -47,23 +48,6 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@PostConstruct
 	private void init() {
 		getLog().info("Initialize EJB");
-
-		Map<String, Object> context = ((BindingProvider) service)
-				.getRequestContext();
-
-		// 192.168.1.50:8080
-		String url = (String) getEntityManager()
-				.createNamedQuery("Usuario.buscaWSDLLocation")
-				.setParameter("id", (short) 1).getSingleResult();
-		if (url != null) {
-			final String WSDL_LOCATION = "http://" + url
-					+ "/acende_apaga_leds/monitor?wsdl";
-
-			getLog().info("WSDL: " + WSDL_LOCATION);
-
-			context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-					WSDL_LOCATION);
-		}
 	}
 
 	@PreDestroy
@@ -97,7 +81,7 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 * .sisbarc.aal.jpa.domain.Pin)
 	 */
 	@Asynchronous
-	public Future<Boolean> atualizaPino(E entidade) {
+	public Future<Boolean> atualizaPino(E entidade) throws ArduinoException {
 		Pin pino = (Pin) entidade;
 
 		Evento evento = getMonitor().alteraEvento(pino.getId(),
@@ -130,7 +114,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 * .util.List)
 	 */
 	@Asynchronous
-	public Future<Boolean> sincronizaEventos(List<E> entidades) {
+	public Future<Boolean> sincronizaEventos(List<E> entidades)
+			throws ArduinoException {
 		Pin[] pinos = getMonitor().buscaDados(getIDs(entidades));
 
 		Boolean arduinoRun = Boolean.TRUE;
@@ -174,7 +159,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	 * .List)
 	 */
 	@Asynchronous
-	public Future<Boolean> alteraEventos(List<E> entidades) {
+	public Future<Boolean> alteraEventos(List<E> entidades)
+			throws ArduinoException {
 		Pin[] pinos = getMonitor().alteraEventos(getPinos(entidades));
 
 		Boolean arduinoRun = Boolean.TRUE;
@@ -200,6 +186,22 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	}
 
 	protected MonitorService getMonitor() {
+		Map<String, Object> context = ((BindingProvider) service)
+				.getRequestContext();
+
+		// 192.168.1.50:8080
+		String url = (String) getEntityManager()
+				.createNamedQuery("Usuario.buscaWSDLLocation")
+				.setParameter("id", (short) 1).getSingleResult();
+		if (url != null) {
+			final String WSDL_LOCATION = url
+					+ "/acende_apaga_leds/monitor?wsdl";
+
+			getLog().info("WSDL: " + WSDL_LOCATION);
+
+			context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+					WSDL_LOCATION);
+		}
 		return service;
 	}
 

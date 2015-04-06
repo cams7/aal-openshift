@@ -51,6 +51,7 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 		getLog().info("Novo Servico");
 	}
 
+	@Override
 	protected void receiveExecute(ArduinoPinType pinType, byte pin,
 			short pinValue) {
 		switch (pinType) {
@@ -102,6 +103,7 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 	}
 
+	@Override
 	protected void receiveMessage(ArduinoPinType pinType, byte pin,
 			short pinValue) {
 		switch (pinType) {
@@ -140,6 +142,7 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 	}
 
+	@Override
 	protected void receiveWrite(ArduinoPinType pinType, byte pin,
 			byte threadInterval, byte actionEvent) {
 		switch (pinType) {
@@ -183,6 +186,7 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 	}
 
+	@Override
 	protected void receiveRead(ArduinoPinType pinType, byte pin,
 			byte threadInterval, byte actionEvent) {
 		switch (pinType) {
@@ -226,6 +230,7 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 	}
 
+	@Override
 	protected short sendResponse(ArduinoPinType pinType, byte pin,
 			short pinValue) {
 		switch (pinType) {
@@ -254,123 +259,106 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 		return pinValue;
 	}
 
-	public EstadoLED alteraEstadoLED(PinPK pinoId, EstadoLED estado) {
+	@Override
+	public EstadoLED alteraEstadoLED(PinPK pinoId, EstadoLED estado)
+			throws ArduinoException {
 		ArduinoPinType tipoPino = pinoId.getPinType();
 		byte pinoLED = pinoId.getPin().byteValue();
 
 		boolean estadoLED = (estado == EstadoLED.ACESO);
 
-		try {
-			if (tipoPino == ArduinoPinType.DIGITAL) {
-				sendPinDigitalUSART(ArduinoStatus.SEND_RESPONSE, pinoLED,
-						estadoLED);
-				serialThreadTime();
-
-				return getEstadoLED(pinoId, ArduinoEvent.EXECUTE);
-			}
-		} catch (ArduinoException e) {
-			getLog().log(Level.SEVERE, e.getMessage());
-		}
-		return null;
-	}
-
-	public LEDEntity[] buscaEstadoLEDs(PinPK[] ids) {
-		try {
-			for (PinPK pino : ids) {
-				ArduinoPinType tipoPino = pino.getPinType();
-				byte pinoLED = pino.getPin().byteValue();
-
-				if (tipoPino == ArduinoPinType.DIGITAL)
-					sendPinDigitalUSARTMessage(ArduinoStatus.SEND_RESPONSE,
-							pinoLED);
-			}
-
+		if (tipoPino == ArduinoPinType.DIGITAL) {
+			sendPinDigitalUSART(ArduinoStatus.SEND_RESPONSE, pinoLED, estadoLED);
 			serialThreadTime();
 
-			LEDEntity[] leds = new LEDEntity[ids.length];
-			for (short i = 0; i < ids.length; i++) {
-				PinPK pino = ids[i];
-				EstadoLED estado = getEstadoLED(pino, ArduinoEvent.MESSAGE);
-
-				leds[i] = new LEDEntity(pino);
-				leds[i].setEstado(estado);
-			}
-			return leds;
-		} catch (ArduinoException e) {
-			getLog().log(Level.SEVERE, e.getMessage());
+			return getEstadoLED(pinoId, ArduinoEvent.EXECUTE);
 		}
-		return null;
 
-	}
-
-	public Evento alteraEvento(PinPK pinoId, Evento evento, Intervalo intervalo) {
-		try {
-			sendEEPROMWrite(ArduinoStatus.SEND_RESPONSE, pinoId.getPinType(),
-					pinoId.getPin().byteValue(), (byte) intervalo.ordinal(),
-					(byte) evento.ordinal());
-
-			serialThreadTime();
-
-			return getEvento(pinoId);
-		} catch (ArduinoException e) {
-			getLog().log(Level.SEVERE, e.getMessage());
-		}
 		return null;
 	}
 
 	@Override
-	public Pin[] alteraEventos(Pin[] pinos) {
-		try {
-			for (Pin pino : pinos) {
-				PinPK id = pino.getId();
-				sendEEPROMWrite(ArduinoStatus.SEND_RESPONSE, id.getPinType(),
-						id.getPin().byteValue(), (byte) pino.getIntervalo()
-								.ordinal(), (byte) pino.getEvento().ordinal());
-			}
+	public LEDEntity[] buscaEstadoLEDs(PinPK[] ids) throws ArduinoException {
+		for (PinPK pino : ids) {
+			ArduinoPinType tipoPino = pino.getPinType();
+			byte pinoLED = pino.getPin().byteValue();
 
-			serialThreadTime();
+			if (tipoPino == ArduinoPinType.DIGITAL)
+				sendPinDigitalUSARTMessage(ArduinoStatus.SEND_RESPONSE, pinoLED);
 
-			for (Pin pino : pinos)
-				pino.setEvento(getEvento(pino.getId()));
-
-			return pinos;
-		} catch (ArduinoException e) {
-			getLog().log(Level.SEVERE, e.getMessage());
 		}
-		return null;
+
+		serialThreadTime();
+
+		LEDEntity[] leds = new LEDEntity[ids.length];
+		for (short i = 0; i < ids.length; i++) {
+			PinPK pino = ids[i];
+			EstadoLED estado = getEstadoLED(pino, ArduinoEvent.MESSAGE);
+
+			leds[i] = new LEDEntity(pino);
+			leds[i].setEstado(estado);
+		}
+
+		return leds;
 	}
 
-	public Pin[] buscaDados(PinPK[] ids) {
-		try {
-			for (PinPK id : ids)
-				sendEEPROMRead(ArduinoStatus.SEND_RESPONSE, id.getPinType(), id
-						.getPin().byteValue());
+	@Override
+	public Evento alteraEvento(PinPK pinoId, Evento evento, Intervalo intervalo)
+			throws ArduinoException {
 
-			serialThreadTime();
+		sendEEPROMWrite(ArduinoStatus.SEND_RESPONSE, pinoId.getPinType(),
+				pinoId.getPin().byteValue(), (byte) intervalo.ordinal(),
+				(byte) evento.ordinal());
 
-			Pin[] pinos = new Pin[ids.length];
+		serialThreadTime();
 
-			for (short i = 0; i < ids.length; i++) {
-				PinPK id = ids[i];
-				pinos[i] = new Pin(id) {
-					private static final long serialVersionUID = 1L;
-				};
+		return getEvento(pinoId);
+	}
 
-				EEPROMData data = getDados(id);
-
-				if (data != null) {
-					pinos[i].setEvento(Evento.values()[data.getActionEvent()]);
-					pinos[i].setIntervalo(Intervalo.values()[data
-							.getThreadInterval()]);
-				}
-			}
-
-			return pinos;
-		} catch (ArduinoException e) {
-			getLog().log(Level.SEVERE, e.getMessage());
+	@Override
+	public Pin[] alteraEventos(Pin[] pinos) throws ArduinoException {
+		for (Pin pino : pinos) {
+			PinPK id = pino.getId();
+			sendEEPROMWrite(ArduinoStatus.SEND_RESPONSE, id.getPinType(), id
+					.getPin().byteValue(),
+					(byte) pino.getIntervalo().ordinal(), (byte) pino
+							.getEvento().ordinal());
 		}
-		return null;
 
+		serialThreadTime();
+
+		for (Pin pino : pinos)
+			pino.setEvento(getEvento(pino.getId()));
+
+		return pinos;
+	}
+
+	@Override
+	public Pin[] buscaDados(PinPK[] ids) throws ArduinoException {
+		for (PinPK id : ids)
+			sendEEPROMRead(ArduinoStatus.SEND_RESPONSE, id.getPinType(), id
+					.getPin().byteValue());
+
+		serialThreadTime();
+
+		Pin[] pinos = new Pin[ids.length];
+
+		for (short i = 0; i < ids.length; i++) {
+			PinPK id = ids[i];
+			pinos[i] = new Pin(id) {
+				private static final long serialVersionUID = 1L;
+			};
+
+			EEPROMData data = getDados(id);
+
+			if (data != null) {
+				pinos[i].setEvento(Evento.values()[data.getActionEvent()]);
+				pinos[i].setIntervalo(Intervalo.values()[data
+						.getThreadInterval()]);
+			}
+		}
+
+		return pinos;
 	}
 
 	private Arduino getArduinoResponse(ArduinoEvent event, PinPK pinoId) {

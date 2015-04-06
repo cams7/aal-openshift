@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.as.service.BaseService;
 import br.com.cams7.jpa.domain.BaseEntity;
 
@@ -17,10 +18,12 @@ import br.com.cams7.jpa.domain.BaseEntity;
 public interface AALService<E extends BaseEntity<ID>, ID extends Serializable>
 		extends BaseService<E, ID> {
 
-	public Future<Boolean> atualizaPino(E entidade);
+	public Future<Boolean> atualizaPino(E entidade) throws ArduinoException;
 
-	public Future<Boolean> sincronizaEventos(List<E> entidades);
+	public Future<Boolean> sincronizaEventos(List<E> entidades)
+			throws ArduinoException;
 
-	public Future<Boolean> alteraEventos(List<E> entidades);
+	public Future<Boolean> alteraEventos(List<E> entidades)
+			throws ArduinoException;
 
 }
