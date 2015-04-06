@@ -6,7 +6,6 @@ package br.com.cams7.as.view;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -15,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.persistence.metamodel.SingularAttribute;
 
 import org.primefaces.event.CloseEvent;
@@ -36,13 +36,9 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 		extends AbstractBase<E> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private final String RESOURCE_BUNDLE = "messages";
 
-	// @Inject
-	// private ResourceBundle bundle;
-
-	// @Inject
-	// private FacesContext facesContext;
+	@Inject
+	private ResourceBundle bundle;
 
 	private final byte ENTITY_ARGUMENT_NUMBER = 1;
 
@@ -164,8 +160,8 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 
 	private void addMessage(Severity severity, String summary, String detail) {
 		FacesMessage message = new FacesMessage(severity, summary, detail);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-		// facesContext.addMessage(null, message);
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		facesContext.addMessage(null, message);
 	}
 
 	protected void addINFOMessage(String summary, String detail) {
@@ -203,12 +199,6 @@ public abstract class BaseView<S extends BaseService<E, ?>, E extends BaseEntity
 	 *         <code>ResourceBundle</code>.
 	 */
 	protected String getMessageFromI18N(String key, Object... params) {
-		Locale locale = FacesContext.getCurrentInstance().getViewRoot()
-				.getLocale();
-
-		ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE,
-				locale, this.getClass().getClassLoader());
-
 		String message;
 		if (params.length > 0)
 			message = MessageFormat.format(bundle.getString(key), params);

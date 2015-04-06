@@ -19,7 +19,7 @@ public abstract class AbstractBase<E extends BaseEntity<?>> {
 
 	public AbstractBase() {
 		super();
-		
+
 		log = Logger.getLogger(this.getClass().getName());
 	}
 

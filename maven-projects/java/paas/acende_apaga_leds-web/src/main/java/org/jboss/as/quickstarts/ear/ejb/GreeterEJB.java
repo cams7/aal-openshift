@@ -37,7 +37,7 @@ import br.com.cams7.teste.ws.HelloService;
  */
 @Stateless
 public class GreeterEJB {
-	private final String IP = "200.141.84.2";
+	private final String IP = "200.149.48.10";
 
 	@WebServiceRef(value = HelloServiceImplService.class)
 	private HelloService port;

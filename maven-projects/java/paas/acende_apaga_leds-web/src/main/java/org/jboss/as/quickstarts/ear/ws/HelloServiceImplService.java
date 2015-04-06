@@ -25,7 +25,7 @@ public class HelloServiceImplService extends Service {
 
 	public static final String WEBSERVICECLIENT_NAME = WEBSERVICEIMPL_NAME
 			+ "Service";
-	public static final String WEBSERVICECLIENT_WSDLLOCATION = "http://200.141.84.2:8080/acende_apaga_leds/sayhello?wsdl";
+	public static final String WEBSERVICECLIENT_WSDLLOCATION = "http://200.149.48.10:8080/acende_apaga_leds/sayhello?wsdl";
 
 	private final static URL HELLOSERVICEIMPLSERVICE_WSDL_LOCATION;
 	private final static WebServiceException HELLOSERVICEIMPLSERVICE_EXCEPTION;

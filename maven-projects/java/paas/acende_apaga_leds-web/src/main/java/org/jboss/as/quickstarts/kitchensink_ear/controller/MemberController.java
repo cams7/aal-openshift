@@ -35,9 +35,6 @@ import org.jboss.as.quickstarts.kitchensink_ear.service.MemberRegistration;
 public class MemberController {
 
 	@Inject
-	private FacesContext facesContext;
-
-	@Inject
 	private MemberRegistration memberRegistration;
 
 	private Member newMember;
@@ -49,6 +46,7 @@ public class MemberController {
 	}
 
 	public void register() throws Exception {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
 		try {
 			memberRegistration.register(newMember);
 			facesContext.addMessage(null, new FacesMessage(
