@@ -15,6 +15,10 @@
 	<name>Acende Apaga LEDs - WEB Service</name>
 	<description>Acende Apaga LEDs</description>
 
+	<properties>
+		<jersey.version>1.8</jersey.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>br.com.cams7</groupId>
@@ -30,7 +34,7 @@
 			<groupId>br.com.cams7.sisbarc</groupId>
 			<artifactId>acende_apaga_leds-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>br.com.cams7.sisbarc</groupId>
 			<artifactId>acende_apaga_leds-common</artifactId>
@@ -45,6 +49,24 @@
 		<dependency>
 			<groupId>org.rxtx</groupId>
 			<artifactId>rxtx</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
 		</dependency>
 	</dependencies>
 

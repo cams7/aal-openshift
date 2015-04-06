@@ -26,13 +26,15 @@ import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
 import br.com.cams7.util.AppException;
 import br.com.cams7.util.AppUtil;
 
+import javax.ws.rs.WebApplicationException;
+
 /**
  * @author cams7
  *
  */
 @Path("/")
 @RequestScoped
-public class ArduinoResourceRESTService {
+public class LEDResourceRESTService {
 
 	@EJB
 	private LEDService service;
@@ -62,10 +64,11 @@ public class ArduinoResourceRESTService {
 			builder = Response.status(Response.Status.OK).entity(led);
 		} catch (InterruptedException | ExecutionException e) {
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(AppUtil.getExceptionMessage(e.getMessage()));
+					.entity(AppUtil.getErrorResponse(AppUtil
+							.getExceptionMessage(e.getMessage())));
 		} catch (ArduinoException e) {
 			builder = Response.status(Response.Status.NOT_FOUND).entity(
-					e.getMessage());
+					AppUtil.getErrorResponse(e.getMessage()));
 		}
 
 		return builder.build();
@@ -84,10 +87,11 @@ public class ArduinoResourceRESTService {
 			builder = Response.status(Response.Status.OK).entity(leds);
 		} catch (InterruptedException | ExecutionException e) {
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(AppUtil.getExceptionMessage(e.getMessage()));
+					.entity(AppUtil.getErrorResponse(AppUtil
+							.getExceptionMessage(e.getMessage())));
 		} catch (ArduinoException e) {
 			builder = Response.status(Response.Status.NOT_FOUND).entity(
-					e.getMessage());
+					AppUtil.getErrorResponse(e.getMessage()));
 		}
 
 		return builder.build();
@@ -97,17 +101,13 @@ public class ArduinoResourceRESTService {
 	@Path("/led/{pino : \\d+}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEstadoLEDAtivadoPorBotao(@PathParam("pino") byte pin) {
-
-		Response.ResponseBuilder builder;
 		try {
 			EstadoLED estado = service.getEstadoLEDAtivadoPorBotao(pin);
-			builder = Response.status(Response.Status.OK).entity(estado);
+			return Response.status(Response.Status.OK).entity(estado).build();
 		} catch (AppException e) {
-			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(e.getMessage());
+			throw new WebApplicationException(e.getMessage(),
+					Response.Status.NOT_FOUND);
 		}
-
-		return builder.build();
 	}
 
 }

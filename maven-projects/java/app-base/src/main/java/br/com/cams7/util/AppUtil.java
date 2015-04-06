@@ -373,4 +373,10 @@ public final class AppUtil {
 		return message.trim();
 	}
 
+	public static Map<String, String> getErrorResponse(String exceptionMessage) {
+		Map<String, String> response = new HashMap<>();
+		response.put("error", exceptionMessage);
+		return response;
+	}
+
 }

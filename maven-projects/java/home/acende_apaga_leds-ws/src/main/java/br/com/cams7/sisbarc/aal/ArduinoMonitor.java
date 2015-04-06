@@ -3,16 +3,13 @@
  */
 package br.com.cams7.sisbarc.aal;
 
-//import java.util.Hashtable;
 import java.util.logging.Level;
 
+import javax.ws.rs.core.MediaType;
+
 import br.com.cams7.arduino.ArduinoException;
-//import javax.naming.Context;
-//import javax.naming.InitialContext;
-//import javax.naming.NamingException;
 import br.com.cams7.arduino.ArduinoPinType;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
-//import br.com.cams7.sisbarc.aal.ejb.service.AppWildflyService;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
@@ -26,6 +23,10 @@ import br.com.cams7.sisbarc.arduino.vo.Arduino.ArduinoStatus;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoEEPROM;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoUSART;
 import br.com.cams7.sisbarc.arduino.vo.EEPROMData;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 /**
  * @author cams7
@@ -44,6 +45,8 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 	private final byte D04_LED_VERMELHO = 4; // Pino 04 Digital
 
 	private final byte A0_POTENCIOMETRO = 0; // Pino 0 Analogico
+
+	private final String URL_SERVER = "http://aal-cams7.rhcloud.com";
 
 	public ArduinoMonitor(String serialPort, int baudRate, long threadTime)
 			throws ArduinoException {
@@ -453,34 +456,23 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 		estadoPino = 0x0000;
 
-		// try {
-		// AppWildflyService service = lookupAppWildflyService();
-		//
-		// EstadoLED estado = service.getEstadoLEDAtivadoPorBotao(pinoLED);
-		//
-		// if (estado != null && estado == EstadoLED.ACESO)
-		// estadoPino = (short) 0x0001;
-		//
-		// } catch (NamingException e) {
-		// getLog().log(Level.SEVERE, e.getMessage());
-		// }
+		Client client = Client.create();
+		WebResource webResource = client.resource(URL_SERVER + "/rest/led/"
+				+ pinoLED);
+
+		ClientResponse response = webResource
+				.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+
+		// Response.Status.OK
+		if (response.getStatus() == 200) {
+			EstadoLED estado = response.getEntity(EstadoLED.class);
+
+			if (estado == EstadoLED.ACESO)
+				estadoPino = (short) 0x0001;
+		}
 
 		return estadoPino;
 	}
-
-	// private AppWildflyService lookupAppWildflyService() throws
-	// NamingException {
-	// final Hashtable<String, String> jndiProperties = new Hashtable<String,
-	// String>();
-	// jndiProperties.put(Context.URL_PKG_PREFIXES,
-	// "org.jboss.ejb.client.naming");
-	// final Context context = new InitialContext(jndiProperties);
-	//
-	// return (AppWildflyService) context
-	// .lookup("ejb:sisbarc/acende_apaga_leds-ejb//LEDServiceImpl!"
-	// + AppWildflyService.class.getName());
-	//
-	// }
 
 	private void serialThreadTime() {
 		try {
