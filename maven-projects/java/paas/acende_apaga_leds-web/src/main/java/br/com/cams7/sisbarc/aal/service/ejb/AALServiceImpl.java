@@ -16,7 +16,6 @@ import javax.ejb.Asynchronous;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.WebServiceRef;
 
 import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.as.service.BaseServiceImpl;
@@ -38,8 +37,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@PersistenceContext(unitName = "acendeApagaLEDsUnit")
 	private EntityManager entityManager;
 
-	@WebServiceRef(value = MonitorServiceImplService.class)
-	private MonitorService service;
+	// @WebServiceRef(value = MonitorServiceImplService.class)
+	// private MonitorService service;
 
 	public AALServiceImpl() {
 		super();
@@ -186,6 +185,9 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	}
 
 	protected MonitorService getMonitor() {
+		MonitorService service = (new MonitorServiceImplService())
+				.getMonitorServiceImplPort();
+
 		Map<String, Object> context = ((BindingProvider) service)
 				.getRequestContext();
 
