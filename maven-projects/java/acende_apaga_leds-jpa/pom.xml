@@ -20,6 +20,25 @@
 			<groupId>br.com.cams7</groupId>
 			<artifactId>app-base</artifactId>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
+
+		<!-- Dependencies for Eclipse JPA Persistence API -->
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Dependency for EclipseLink NoSQL Persistence API -->
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.nosql</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

@@ -24,9 +24,6 @@ import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
 import br.com.cams7.sisbarc.aal.service.ejb.LEDService;
 import br.com.cams7.util.AppException;
-import br.com.cams7.util.AppUtil;
-
-import javax.ws.rs.WebApplicationException;
 
 /**
  * @author cams7
@@ -35,6 +32,8 @@ import javax.ws.rs.WebApplicationException;
 @Path("/")
 @RequestScoped
 public class LEDResourceRESTService {
+
+	private final String ERROR_MESSAGE = "errorMessage";
 
 	@EJB
 	private LEDService service;
@@ -64,11 +63,10 @@ public class LEDResourceRESTService {
 			builder = Response.status(Response.Status.OK).entity(led);
 		} catch (InterruptedException | ExecutionException e) {
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(AppUtil.getErrorResponse(AppUtil
-							.getExceptionMessage(e.getMessage())));
+					.header(ERROR_MESSAGE, e.getMessage());
 		} catch (ArduinoException e) {
-			builder = Response.status(Response.Status.NOT_FOUND).entity(
-					AppUtil.getErrorResponse(e.getMessage()));
+			builder = Response.status(Response.Status.NOT_FOUND).header(
+					ERROR_MESSAGE, e.getMessage());
 		}
 
 		return builder.build();
@@ -78,7 +76,6 @@ public class LEDResourceRESTService {
 	@Path("/leds")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getLEDs() {
-
 		Response.ResponseBuilder builder;
 		try {
 			Future<List<LEDEntity>> call = service.getLEDsAtivadoPorBotao();
@@ -87,11 +84,10 @@ public class LEDResourceRESTService {
 			builder = Response.status(Response.Status.OK).entity(leds);
 		} catch (InterruptedException | ExecutionException e) {
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity(AppUtil.getErrorResponse(AppUtil
-							.getExceptionMessage(e.getMessage())));
+					.header(ERROR_MESSAGE, e.getMessage());
 		} catch (ArduinoException e) {
-			builder = Response.status(Response.Status.NOT_FOUND).entity(
-					AppUtil.getErrorResponse(e.getMessage()));
+			builder = Response.status(Response.Status.NOT_FOUND).header(
+					ERROR_MESSAGE, e.getMessage());
 		}
 
 		return builder.build();
@@ -101,13 +97,18 @@ public class LEDResourceRESTService {
 	@Path("/led/{pino : \\d+}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEstadoLEDAtivadoPorBotao(@PathParam("pino") byte pin) {
+		Response.ResponseBuilder builder;
 		try {
 			EstadoLED estado = service.getEstadoLEDAtivadoPorBotao(pin);
-			return Response.status(Response.Status.OK).entity(estado).build();
+			builder = Response.status(Response.Status.OK).entity(estado);
 		} catch (AppException e) {
-			throw new WebApplicationException(e.getMessage(),
-					Response.Status.NOT_FOUND);
+			// throw new WebApplicationException(e.getMessage(),
+			// Response.Status.NOT_FOUND);
+			builder = Response.status(Response.Status.NOT_FOUND).header(
+					ERROR_MESSAGE, e.getMessage());
 		}
+
+		return builder.build();
 	}
 
 }

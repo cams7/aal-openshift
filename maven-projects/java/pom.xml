@@ -14,6 +14,10 @@
 
 	<name>Sistema Embarcado - Modulos Java</name>
 	<description>Modulo com todas as aplicacoes Java</description>
+	
+	<properties>
+		<eclipselink.version>2.6.0-M3</eclipselink.version>
+	</properties>
 
 	<modules>
 		<module>app-base</module>
@@ -21,6 +25,14 @@
 		<module>acende_apaga_leds-common</module>
 		<module>paas</module>
 	</modules>
+	
+	<repositories>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>			
@@ -43,6 +55,25 @@
 				<artifactId>acende_apaga_leds-common</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
+			</dependency>
+			
+			<!-- Dependencies for Eclipse JPA Persistence API -->
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>eclipselink</artifactId>
+				<version>${eclipselink.version}</version>
+			</dependency>
+			<!-- Dependency for EclipseLink NoSQL Persistence API -->
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.nosql</artifactId>
+				<version>${eclipselink.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.5.2</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

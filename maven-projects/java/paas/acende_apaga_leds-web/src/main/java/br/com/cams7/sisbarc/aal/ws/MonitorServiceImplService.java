@@ -25,7 +25,7 @@ public class MonitorServiceImplService extends Service {
 
 	public static final String WEBSERVICECLIENT_NAME = WEBSERVICEIMPL_NAME
 			+ "Service";
-	public static final String WEBSERVICECLIENT_WSDLLOCATION = "http://200.149.48.10:8080/acende_apaga_leds/monitor?wsdl";
+	public static final String WEBSERVICECLIENT_WSDLLOCATION = "http://localhost:8080/acende_apaga_leds/monitor?wsdl";
 
 	private final static URL MONITORSERVICEIMPLSERVICE_WSDL_LOCATION;
 	private final static WebServiceException MONITORSERVICEIMPLSERVICE_EXCEPTION;

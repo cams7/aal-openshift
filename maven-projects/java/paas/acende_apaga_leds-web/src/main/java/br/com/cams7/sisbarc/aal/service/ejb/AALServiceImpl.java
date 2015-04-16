@@ -37,9 +37,6 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 	@PersistenceContext(unitName = "acendeApagaLEDsUnit")
 	private EntityManager entityManager;
 
-	// @WebServiceRef(value = MonitorServiceImplService.class)
-	// private MonitorService service;
-
 	public AALServiceImpl() {
 		super();
 	}

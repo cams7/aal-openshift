@@ -4,13 +4,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.arduino.ArduinoPinType;
@@ -19,15 +22,15 @@ import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity;
 import br.com.cams7.sisbarc.aal.jpa.domain.entity.LEDEntity.EstadoLED;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
 import br.com.cams7.sisbarc.aal.service.MonitorService;
-import br.com.cams7.util.AppUtil;
 
-@Path("/")
+@RestController
+@RequestMapping("/rest")
 public class LEDResourceRESTService {
 
 	private final Logger LOG = Logger.getLogger(LEDResourceRESTService.class
 			.getName());
 
-	@Context
+	@Autowired
 	private ServletContext context;
 
 	private MonitorService getMonitor() {
@@ -36,16 +39,14 @@ public class LEDResourceRESTService {
 		return monitor;
 	}
 
-	// LED Amarela - arduino/led?tipo_pino=DIGITAL&pino=11&estado=ON
-	// LED Verde - arduino/led?tipo_pino=DIGITAL&pino=10&estado=OFF
-	// LED Vermelha - arduino/led?tipo_pino=DIGITAL&pino=9&estado=OFF
-	@GET
-	@Path("/led")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response alteraLEDEstado(
-			@QueryParam("tipo_pino") String stringTipoPino,
-			@QueryParam("pino") String stringPino,
-			@QueryParam("estado") String stringEstado) {
+	// LED Amarela - /rest/led/DIGITAL/11/ACESO
+	// LED Verde - /rest/led/DIGITAL/10/APAGADO
+	// LED Vermelha - /rest/led/DIGITAL/9/APAGADO
+	@RequestMapping(value = "/led/{tipo_pino}/{pino}/{estado}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<?> alteraLEDEstado(
+			@PathVariable("tipo_pino") String stringTipoPino,
+			@PathVariable("pino") String stringPino,
+			@PathVariable("estado") String stringEstado) {
 
 		ArduinoPinType tipoPino = ArduinoPinType.valueOf(stringTipoPino);
 		Short pino = Short.valueOf(stringPino);
@@ -53,7 +54,7 @@ public class LEDResourceRESTService {
 		LEDEntity led = new LEDEntity(new PinPK(tipoPino, pino));
 		led.setEstado(EstadoLED.valueOf(stringEstado));
 
-		Response.ResponseBuilder builder;
+		ResponseEntity<?> response;
 
 		try {
 			EstadoLED estado = getMonitor().alteraEstadoLED(led.getId(),
@@ -69,13 +70,20 @@ public class LEDResourceRESTService {
 						"Ocorreu um erro ao tenta buscar o ESTADO do LED '"
 								+ led.getId() + "'");
 
-			builder = Response.status(Response.Status.OK).entity(led);
+			response = new ResponseEntity<>(led, HttpStatus.OK);
 		} catch (ArduinoException e) {
-			builder = Response.status(Response.Status.NOT_FOUND).entity(
-					AppUtil.getErrorResponse(e.getMessage()));
+			response = new ResponseEntity<>(getHeaders(e.getMessage()),
+					HttpStatus.NOT_FOUND);
+			LOG.log(Level.SEVERE, e.getMessage());
 		}
 
-		return builder.build();
+		return response;
+	}
+
+	private HttpHeaders getHeaders(String message) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("errorMessage", message);
+		return headers;
 	}
 
 }

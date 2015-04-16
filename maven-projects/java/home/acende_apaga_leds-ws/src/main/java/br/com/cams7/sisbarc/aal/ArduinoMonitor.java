@@ -5,8 +5,6 @@ package br.com.cams7.sisbarc.aal;
 
 import java.util.logging.Level;
 
-import javax.ws.rs.core.MediaType;
-
 import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.arduino.ArduinoPinType;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
@@ -23,10 +21,6 @@ import br.com.cams7.sisbarc.arduino.vo.Arduino.ArduinoStatus;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoEEPROM;
 import br.com.cams7.sisbarc.arduino.vo.ArduinoUSART;
 import br.com.cams7.sisbarc.arduino.vo.EEPROMData;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
 /**
  * @author cams7
@@ -46,7 +40,8 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 	private final byte A0_POTENCIOMETRO = 0; // Pino 0 Analogico
 
-	private final String URL_SERVER = "http://aal-cams7.rhcloud.com";
+	// private final String URL_SERVER = "http://aal-cams7.rhcloud.com";
+	private final String URL_SERVER = "http://localhost:8180/acende_apaga_leds-web";
 
 	public ArduinoMonitor(String serialPort, int baudRate, long threadTime)
 			throws ArduinoException {
@@ -456,20 +451,21 @@ public class ArduinoMonitor extends ArduinoServiceImpl implements
 
 		estadoPino = 0x0000;
 
-		Client client = Client.create();
-		WebResource webResource = client.resource(URL_SERVER + "/rest/led/"
-				+ pinoLED);
-
-		ClientResponse response = webResource
-				.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-
-		// Response.Status.OK
-		if (response.getStatus() == 200) {
-			EstadoLED estado = response.getEntity(EstadoLED.class);
-
-			if (estado == EstadoLED.ACESO)
-				estadoPino = (short) 0x0001;
-		}
+		// Client client = Client.create();
+		// WebResource webResource = client.resource(URL_SERVER + "/rest/led/"
+		// + pinoLED);
+		//
+		// ClientResponse response = webResource
+		// .accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		//
+		// // Response.Status.OK
+		// if (response.getStatus() != 200)
+		// return estadoPino;
+		//
+		// EstadoLED estado = response.getEntity(EstadoLED.class);
+		//
+		// if (estado == EstadoLED.ACESO)
+		// estadoPino = (short) 0x0001;
 
 		return estadoPino;
 	}

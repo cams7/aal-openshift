@@ -3,11 +3,11 @@
  */
 package br.com.cams7.sisbarc.aal.service;
 
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import br.com.cams7.arduino.ArduinoException;
 import br.com.cams7.sisbarc.aal.AppContextListener;
@@ -22,16 +22,15 @@ import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
  * @author cams7
  *
  */
+@Controller("monitorService")
 @WebService(endpointInterface = "br.com.cams7.sisbarc.aal.service.MonitorService")
 public class MonitorServiceImpl implements MonitorService {
 
-	@Resource
-	private WebServiceContext context;
+	@Autowired
+	private ServletContext context;
 
 	private MonitorService getMonitor() {
-		ServletContext servletContext = (ServletContext) context
-				.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-		MonitorService monitor = (MonitorService) servletContext
+		MonitorService monitor = (MonitorService) context
 				.getAttribute(AppContextListener.MONITOR);
 		return monitor;
 	}
