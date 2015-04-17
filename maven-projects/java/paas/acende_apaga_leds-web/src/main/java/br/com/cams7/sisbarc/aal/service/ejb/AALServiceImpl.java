@@ -24,7 +24,7 @@ import br.com.cams7.sisbarc.aal.jpa.domain.Pin;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Evento;
 import br.com.cams7.sisbarc.aal.jpa.domain.Pin.Intervalo;
 import br.com.cams7.sisbarc.aal.jpa.domain.pk.PinPK;
-import br.com.cams7.sisbarc.aal.service.MonitorService;
+import br.com.cams7.sisbarc.aal.ws.LEDService;
 import br.com.cams7.sisbarc.aal.ws.MonitorServiceImplService;
 
 /**
@@ -87,7 +87,7 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 
 		if (evento != null) {
 			pino.setEvento(evento);
-			save(entidade);
+			update(entidade);
 			arduinoRun = Boolean.TRUE;
 
 			getLog().info(
@@ -181,8 +181,8 @@ public abstract class AALServiceImpl<E extends BaseEntity<ID>, ID extends Serial
 		return entityManager;
 	}
 
-	protected MonitorService getMonitor() {
-		MonitorService service = (new MonitorServiceImplService())
+	protected LEDService getMonitor() {
+		LEDService service = (new MonitorServiceImplService())
 				.getMonitorServiceImplPort();
 
 		Map<String, Object> context = ((BindingProvider) service)

@@ -10,53 +10,73 @@ import org.eclipse.persistence.nosql.annotations.DataFormatType;
 import org.eclipse.persistence.nosql.annotations.Field;
 import org.eclipse.persistence.nosql.annotations.NoSql;
 
+import br.com.cams7.jpa.domain.BaseEntity;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
 @Entity
 @NoSql(dataFormat = DataFormatType.MAPPED)
-public class Employee {
+public class Employee extends BaseEntity<String> {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	@Field(name = "_id")
-	private String employeeId;
+	private String id;
 
-	private String employeeName;
+	private String name;
 
-	private Date employeeHireDate;
+	private Date hireDate;
 
-	private double employeeSalary;
+	private double salary;
 
-	public String getEmployeeId() {
-		return employeeId;
+	public Employee() {
+		super();
 	}
 
-	public void setEmployeeId(String employeeId) {
-		this.employeeId = employeeId;
+	public Employee(String id) {
+		super(id);
 	}
 
-	public String getEmployeeName() {
-		return employeeName;
+	@Override
+	public String toString() {
+		return this.getClass().getName() + "[id = " + getId() + ", name = "
+				+ getName() + ", hireDate = " + getHireDate() + ", salary = "
+				+ getSalary() + "]";
 	}
 
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
-	public Date getEmployeeHireDate() {
-		return employeeHireDate;
+	public Date getHireDate() {
+		return hireDate;
 	}
 
-	public void setEmployeeHireDate(Date employeeHireDate) {
-		this.employeeHireDate = employeeHireDate;
+	public void setHireDate(Date hireDate) {
+		this.hireDate = hireDate;
 	}
 
-	public double getEmployeeSalary() {
-		return employeeSalary;
+	public double getSalary() {
+		return salary;
 	}
 
-	public void setEmployeeSalary(double employeeSalary) {
-		this.employeeSalary = employeeSalary;
+	public void setSalary(double salary) {
+		this.salary = salary;
 	}
 }

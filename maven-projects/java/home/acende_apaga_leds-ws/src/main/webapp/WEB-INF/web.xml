@@ -5,37 +5,28 @@
 	version="3.1">
 
 	<description>Acende Apaga LEDs</description>
-
-	<servlet>
-    	<servlet-name>jaxws-servlet</servlet-name>
-    	<servlet-class>
-    		com.sun.xml.ws.transport.http.servlet.WSSpringServlet
-    	</servlet-class>
-  	</servlet>	
-	<servlet-mapping>
-        <servlet-name>jaxws-servlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
         
 	<servlet>
-    	<servlet-name>sayhello-servlet</servlet-name>
+    	<servlet-name>sayhello</servlet-name>
     	<servlet-class>
     		com.sun.xml.ws.transport.http.servlet.WSSpringServlet
     	</servlet-class>
+    	<load-on-startup>1</load-on-startup>
   	</servlet>	
 	<servlet-mapping>
-        <servlet-name>sayhello-servlet</servlet-name>
+        <servlet-name>sayhello</servlet-name>
         <url-pattern>/sayhello</url-pattern>
     </servlet-mapping>
     
 	<servlet>
-    	<servlet-name>monitor-servlet</servlet-name>
+    	<servlet-name>monitor</servlet-name>
     	<servlet-class>
     		com.sun.xml.ws.transport.http.servlet.WSSpringServlet
     	</servlet-class>
+    	<load-on-startup>1</load-on-startup>
   	</servlet>	
 	<servlet-mapping>
-        <servlet-name>monitor-servlet</servlet-name>
+        <servlet-name>monitor</servlet-name>
         <url-pattern>/monitor</url-pattern>
     </servlet-mapping>
 	

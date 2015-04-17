@@ -12,7 +12,7 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.springframework.stereotype.Controller;
 
-@Controller("helloService")
+@Controller("helloWS")
 @WebService(endpointInterface = "br.com.cams7.teste.ws.HelloService")
 public class HelloServiceImpl implements HelloService {
 

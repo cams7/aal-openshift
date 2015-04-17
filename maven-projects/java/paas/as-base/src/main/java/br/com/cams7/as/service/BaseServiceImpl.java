@@ -5,7 +5,7 @@ package br.com.cams7.as.service;
 
 import java.io.Serializable;
 
-import br.com.cams7.as.jpa.repository.BaseRepositoryImpl;
+import br.com.cams7.as.jpa.repository.ASRepositoryImpl;
 import br.com.cams7.jpa.domain.BaseEntity;
 
 /**
@@ -13,7 +13,7 @@ import br.com.cams7.jpa.domain.BaseEntity;
  *
  */
 public abstract class BaseServiceImpl<E extends BaseEntity<ID>, ID extends Serializable>
-		extends BaseRepositoryImpl<E, ID> implements BaseService<E, ID> {
+		extends ASRepositoryImpl<E, ID> implements BaseService<E, ID> {
 
 	public BaseServiceImpl() {
 		super();

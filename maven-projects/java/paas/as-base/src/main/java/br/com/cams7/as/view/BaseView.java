@@ -22,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
-import br.com.cams7.as.AbstractBase;
+import br.com.cams7.app.AbstractBase;
 import br.com.cams7.as.service.BaseService;
 import br.com.cams7.jpa.domain.BaseEntity;
 import br.com.cams7.jpa.domain.SortOrderField;

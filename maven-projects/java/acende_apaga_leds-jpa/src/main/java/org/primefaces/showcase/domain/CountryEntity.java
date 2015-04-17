@@ -3,7 +3,6 @@
  */
 package org.primefaces.showcase.domain;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,9 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-
 //import org.hibernate.validator.constraints.NotEmpty;
-
 import br.com.cams7.jpa.domain.BaseEntity;
 
 /**
@@ -33,7 +30,7 @@ import br.com.cams7.jpa.domain.BaseEntity;
 @Entity
 @Table(name = "pais")
 @NamedQuery(name = "Country.findAll", query = "SELECT country FROM CountryEntity country")
-public class CountryEntity extends BaseEntity<Short> implements Serializable {
+public class CountryEntity extends BaseEntity<Short> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,9 +40,9 @@ public class CountryEntity extends BaseEntity<Short> implements Serializable {
 	@Column(name = "id_pais")
 	private Short id;
 
-//	@NotEmpty
+	// @NotEmpty
 	@Size(min = 3, max = 30)
-	@Column(name = "nome_pais", nullable=false)
+	@Column(name = "nome_pais", nullable = false)
 	private String name;// Nome
 
 	@NotNull

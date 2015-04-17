@@ -3,7 +3,6 @@
  */
 package org.primefaces.showcase.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,7 +33,7 @@ import br.com.cams7.jpa.domain.BaseEntity;
 @Entity
 @Table(name = "carro")
 @NamedQuery(name = "Car.findAll", query = "SELECT car FROM CarEntity car")
-public class CarEntity extends BaseEntity<Integer> implements Serializable {
+public class CarEntity extends BaseEntity<Integer> {
 
 	private static final long serialVersionUID = 1L;
 

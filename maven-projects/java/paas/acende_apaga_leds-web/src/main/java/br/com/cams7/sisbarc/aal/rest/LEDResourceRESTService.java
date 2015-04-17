@@ -52,22 +52,27 @@ public class LEDResourceRESTService {
 		ArduinoPinType tipoPino = ArduinoPinType.valueOf(stringTipoPino);
 		Short pino = Short.valueOf(stringPino);
 
-		LEDEntity led = service.findOne(new PinPK(tipoPino, pino));
-		led.setEstado(EstadoLED.valueOf(stringEstado));
-
 		Response.ResponseBuilder builder;
 
-		try {
-			Future<LEDEntity> call = service.alteraLEDEstado(led);
-			led = call.get();
-			builder = Response.status(Response.Status.OK).entity(led);
-		} catch (InterruptedException | ExecutionException e) {
-			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.header(ERROR_MESSAGE, e.getMessage());
-		} catch (ArduinoException e) {
+		LEDEntity led = service.findOne(new PinPK(tipoPino, pino));
+		if (led != null) {
+			led.setEstado(EstadoLED.valueOf(stringEstado));
+
+			try {
+				Future<LEDEntity> call = service.alteraLEDEstado(led);
+				led = call.get();
+				builder = Response.status(Response.Status.OK).entity(led);
+			} catch (InterruptedException | ExecutionException e) {
+				builder = Response
+						.status(Response.Status.INTERNAL_SERVER_ERROR).header(
+								ERROR_MESSAGE, e.getMessage());
+			} catch (ArduinoException e) {
+				builder = Response.status(Response.Status.NOT_FOUND).header(
+						ERROR_MESSAGE, e.getMessage());
+			}
+		} else
 			builder = Response.status(Response.Status.NOT_FOUND).header(
-					ERROR_MESSAGE, e.getMessage());
-		}
+					ERROR_MESSAGE, "O pino informado nao e valido");
 
 		return builder.build();
 	}
